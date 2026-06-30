@@ -1,0 +1,9 @@
+__pycache__/
+.DS_Store
+data/
+.venv/
+.env
+config.toml
+
+generate_letter.py
+temp.py
