@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, AliasChoices, ConfigDict, field_validator
 from datetime import date, datetime
+from bs4 import BeautifulSoup
 
 
 class Job(BaseModel):
@@ -42,6 +43,15 @@ class Job(BaseModel):
             return None
 
         if isinstance(value, int):
-            return datetime.fromtimestamp(value)
+            return datetime.fromtimestamp(value).date()
         else:
-            return datetime.fromisoformat(value)
+            return datetime.fromisoformat(value).date()
+
+    @field_validator("description", mode="before")
+    @classmethod
+    def remove_html(cls, text):
+        return BeautifulSoup(text, "html.parser").get_text(separator=" ")
+
+
+class JobSearchResults(BaseModel):
+    jobs: list[Job]

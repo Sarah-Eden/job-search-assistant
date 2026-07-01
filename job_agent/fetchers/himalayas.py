@@ -2,7 +2,7 @@ import tomllib
 import requests
 import logging
 from pathlib import Path
-from bs4 import BeautifulSoup
+from ..models import JobSearchResults
 
 logger = logging.getLogger(__name__)
 
@@ -22,38 +22,13 @@ def get_himalayas_jobs():
             logger.warning("Response is not JSON")
             raise TypeError("Response is not JSON")
 
-        response_text = response.json()
+        results = JobSearchResults.model_validate_json(response.text)
 
     except (requests.exceptions.RequestException, TypeError) as e:
         logger.error(f"Error fetching data: {e}")
         return []
 
-    return [standardize_himalayas_job(job) for job in response_text["jobs"]]
-
-
-def standardize_himalayas_job(job: dict):
-    selected_keys = [
-        "guid",
-        "title",
-        "companyName",
-        "employmentType",
-        "seniority",
-        "description",
-        "locationRestrictions",
-        "timezoneRestrictions",
-        "categories",
-        "parentCategories",
-        "pubDate",
-        "expiryDate",
-        "applicationLink",
-    ]
-
-    clean_job = {k: job.get(k, None) for k in selected_keys}
-    raw_description = job.get("description") or ""
-    soup = BeautifulSoup(raw_description, "html.parser")
-    clean_job["description"] = soup.get_text(separator=" ")
-
-    return clean_job
+    return results
 
 
 if __name__ == "__main__":
