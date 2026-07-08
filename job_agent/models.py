@@ -3,7 +3,7 @@ from datetime import date, datetime
 from bs4 import BeautifulSoup
 
 
-class Job(BaseModel):
+class JobPosting(BaseModel):
     title: str = Field(validation_alias="jobTitle")
     description: str = Field(validation_alias="jobDescription")
     company_name: str | None = Field(default=None, validation_alias="companyName")
@@ -20,6 +20,7 @@ class Job(BaseModel):
         default=None, validation_alias=AliasChoices("parentCategories", "jobIndustry")
     )
     pub_date: date | None = Field(default=None, validation_alias="pubDate")
+    expiry_date: date | None = Field(default=None, validation_alias="expiryDate")
     application_url: str = Field(
         validation_alias=AliasChoices("applicationLink", "url")
     )
@@ -53,5 +54,18 @@ class Job(BaseModel):
         return BeautifulSoup(text, "html.parser").get_text(separator=" ")
 
 
+class JobRecord(BaseModel):
+    id: int
+    title: str
+    description: str
+    company_name: str | None = None
+    employment_type: str | None = None
+    experience_level: list[str] | None = None
+    location: list[str] | None = None
+    categories: list[str] | None = None
+    expiry_date: date | None = None
+    model_config = ConfigDict(validate_by_name=True, from_attributes=True)
+
+
 class JobSearchResults(BaseModel):
-    jobs: list[Job]
+    jobs: list[JobPosting]
