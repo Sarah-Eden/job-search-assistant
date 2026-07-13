@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, AliasChoices, ConfigDict, field_validator
 from datetime import date, datetime
 from bs4 import BeautifulSoup
+from typing import NamedTuple
 
 
 class JobPosting(BaseModel):
@@ -37,7 +38,17 @@ class JobPosting(BaseModel):
         else:
             return value
 
-    @field_validator("pub_date", mode="before")
+    @field_validator("employment_type", mode="before")
+    @classmethod
+    def remove_list(cls, value):
+        if value is None:
+            return None
+        if isinstance(value, list):
+            return ", ".join(value)
+        else:
+            return value
+
+    @field_validator("pub_date", "expiry_date", mode="before")
     @classmethod
     def convert_time(cls, value):
         if value is None:
@@ -69,3 +80,11 @@ class JobRecord(BaseModel):
 
 class JobSearchResults(BaseModel):
     jobs: list[JobPosting]
+
+
+class FetchResult(NamedTuple):
+    source_name: str
+    term: str
+    params: dict
+    results: JobSearchResults | list
+    status: str

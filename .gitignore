@@ -7,3 +7,4 @@ config.toml
 
 generate_letter.py
 temp.py
+tests/
