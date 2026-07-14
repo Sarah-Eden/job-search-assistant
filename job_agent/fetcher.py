@@ -29,7 +29,9 @@ def query_api(source, params, term):
             body = response.json()
             if body.get("jobCount") == 0:
                 logger.info(f"No results for {source}, {term}, {params}")
-                return FetchResult(source, term, params, [], "no_results")
+                return FetchResult(
+                    source, term, params, JobSearchResults(jobs=[]), "no_results"
+                )
 
         response.raise_for_status()
 
@@ -49,7 +51,7 @@ def query_api(source, params, term):
     except (requests.exceptions.RequestException, TypeError) as e:
 
         logger.error(f"Error fetching {source} for '{term}': {e}")
-        return FetchResult(source, term, params, [], "error")
+        return FetchResult(source, term, params, JobSearchResults(jobs=[]), "error")
 
 
 def fetch_all_jobs():
