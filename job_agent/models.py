@@ -1,3 +1,5 @@
+from enum import Enum
+
 from pydantic import BaseModel, Field, AliasChoices, ConfigDict, field_validator
 from datetime import date, datetime
 from bs4 import BeautifulSoup
@@ -88,3 +90,12 @@ class FetchResult(NamedTuple):
     params: dict
     results: JobSearchResults | list
     status: str
+
+
+class JobProcessResult(Enum):
+    CREATED_NEW_JOB = "created_new_job"
+    DUPLICATE_IRRELEVANT = "duplicate_irrelevant"
+    DUPLICATE_UNCHANGED = "duplicate_unchanged"
+    DUPLICATE_REPOSTED = "duplicate_reposted"
+    DUPLICATE_REPOSTED_APPLIED = "duplicate_reposted_applied"
+    ERROR = "error"

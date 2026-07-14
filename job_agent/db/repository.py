@@ -1,8 +1,15 @@
 from sqlalchemy import insert, null, or_, select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
-from job_agent.db.schema import Job, Score, Application, SearchQuery, CoverLetter
-from job_agent.models import JobPosting, JobRecord
+from job_agent.db.schema import (
+    Job,
+    Score,
+    Application,
+    SearchQuery,
+    CoverLetter,
+    JobSearchQuery,
+)
+from job_agent.models import JobPosting, JobRecord, JobProcessResult
 from datetime import date
 import logging
 
@@ -13,9 +20,27 @@ class JobRepository:
     def __init__(self, engine):
         self.engine = engine
 
-    def create_job_posting(
-        self, job_posting: JobPosting, source: str, search_query: str
+    def create_search_query(
+        self, query: str, source: str, params: dict, status: str, num_jobs: int
     ):
+        try:
+            with Session(self.engine) as session:
+                search_query = SearchQuery(
+                    query_text=query,
+                    source=source,
+                    parameters=params,
+                    status=status,
+                    jobs_found=num_jobs,
+                )
+                session.add(search_query)
+                session.commit()
+                return search_query.id
+
+        except Exception as e:
+            logger.error(f"Unexpected error creating new search query: {e}")
+            raise
+
+    def process_job_posting(self, job_posting: JobPosting, search_query_id: int):
 
         try:
             with Session(self.engine) as session:
@@ -23,27 +48,38 @@ class JobRepository:
                     Job.application_url == job_posting.application_url
                 )
                 job_record = session.scalars(stmt).first()
-                # No match found, create new record
+
+                # No match found
                 if job_record is None:
-                    job = Job(
-                        **job_posting.model_dump(),
-                        source=source,
-                        search_query=search_query,
-                    )
+                    job = Job(**job_posting.model_dump())
                     session.add(job)
+                    session.flush()
+
+                    job_search_query = JobSearchQuery(
+                        job_id=job.id, search_query_id=search_query_id
+                    )
+                    session.add(job_search_query)
                     session.commit()
-                    return True
+                    return JobProcessResult.CREATED_NEW_JOB
+
                 else:
-                    # Check if job is relevant
+                    job_search_query = JobSearchQuery(
+                        job_id=job_record.id, search_query_id=search_query_id
+                    )
+                    session.add(job_search_query)
+                    session.commit()
+
+                    # Job record not relevant
                     if job_record.is_relevant == False:
-                        return False
+                        return JobProcessResult.DUPLICATE_IRRELEVANT
+
                     else:
                         # Check if job dates changed
                         if (
                             job_record.pub_date == job_posting.pub_date
                             and job_record.expiry_date == job_posting.expiry_date
                         ):
-                            return False
+                            return JobProcessResult.DUPLICATE_UNCHANGED
                         else:
                             stmt = select(Application).where(
                                 Application.job_id == job_record.id
@@ -51,16 +87,16 @@ class JobRepository:
                             applied = session.scalars(stmt).first()
                             if applied is not None:
                                 logger.warning(f"Job Reposted: {job_posting}")
-                                return "applied_job_reposted"
+                                return JobProcessResult.DUPLICATE_REPOSTED_APPLIED
                             else:
-                                return False
+                                return JobProcessResult.DUPLICATE_REPOSTED
 
         except IntegrityError:
             session.rollback()
             logger.error(
                 f"Unexpected integrity error for {job_posting.application_url}"
             )
-            return False
+            return JobProcessResult.ERROR
 
     def get_unscored_jobs(self):
         with Session(self.engine) as session:

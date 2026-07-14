@@ -13,6 +13,7 @@ from sqlalchemy import (
     DateTime,
     Enum,
     func,
+    UniqueConstraint,
 )
 
 
@@ -33,8 +34,6 @@ class Job(Base):
     pub_date: Mapped[date] = mapped_column(Date)
     expiry_date: Mapped[date] = mapped_column(Date)
     application_url: Mapped[str] = mapped_column(Text, unique=True)
-    source: Mapped[str] = mapped_column(String(255))
-    search_query: Mapped[str] = mapped_column(String(255))
     is_relevant: Mapped[Optional[bool]] = mapped_column(Boolean)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
@@ -82,7 +81,18 @@ class SearchQuery(Base):
     query_text: Mapped[str] = mapped_column(Text)
     source: Mapped[str] = mapped_column(String(255))
     parameters: Mapped[dict] = mapped_column(JSON)
-    date_run: Mapped[date] = mapped_column(Date)
+    status: Mapped[str] = mapped_column(Enum("success", "error", "no_results"))
     jobs_found: Mapped[int] = mapped_column(Integer)
-    num_relevant: Mapped[int] = mapped_column(Integer)
+    num_relevant: Mapped[Optional[int]] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class JobSearchQuery(Base):
+    __tablename__ = "job_search_queries"
+    __table_args__ = (UniqueConstraint("job_id", "search_query_id"),)
+    id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
+    job_id: Mapped[int] = mapped_column(ForeignKey("job_postings.id"), index=True)
+    search_query_id: Mapped[int] = mapped_column(
+        ForeignKey("search_queries.id"), index=True
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
