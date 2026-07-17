@@ -7,7 +7,7 @@ import os
 BASE_DIR = Path(__file__).parent.parent
 
 OUTPUT_FORMAT = """
-Output Format: Respond with only a JSON object, no other text, in exactly this structure:
+Output Format: Respond with only the raw JSON object, in exactly this structure. Do not wrap it in markdown code fences or backticks. Do not include any text before or after the JSON.
 {
     "score": <float between 0.0 and 1.0 where 1.0 is an excellent fit and 0.0 is not relevant at all>,
     "is_relevant": <true or false>,
