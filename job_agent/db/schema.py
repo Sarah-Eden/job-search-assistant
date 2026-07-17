@@ -31,8 +31,8 @@ class Job(Base):
     experience_level: Mapped[Optional[list]] = mapped_column(JSON)
     location: Mapped[Optional[list]] = mapped_column(JSON)
     categories: Mapped[Optional[list]] = mapped_column(JSON)
-    pub_date: Mapped[date] = mapped_column(Date)
-    expiry_date: Mapped[date] = mapped_column(Date)
+    pub_date: Mapped[Optional[date]] = mapped_column(Date)
+    expiry_date: Mapped[Optional[date]] = mapped_column(Date)
     application_url: Mapped[str] = mapped_column(Text, unique=True)
     is_relevant: Mapped[Optional[bool]] = mapped_column(Boolean)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
@@ -54,7 +54,14 @@ class Application(Base):
     portal_available: Mapped[Optional[bool]] = mapped_column(Boolean)
     date_applied: Mapped[Optional[date]] = mapped_column(Date)
     status: Mapped[str] = mapped_column(
-        Enum("pending", "applied", "interviewing", "rejected", "withdrawn"),
+        Enum(
+            "pending",
+            "applied",
+            "interviewing",
+            "rejected",
+            "withdrawn",
+            name="application_status",
+        ),
         nullable=False,
     )
     response_received: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -81,7 +88,9 @@ class SearchQuery(Base):
     query_text: Mapped[str] = mapped_column(Text)
     source: Mapped[str] = mapped_column(String(255))
     parameters: Mapped[dict] = mapped_column(JSON)
-    status: Mapped[str] = mapped_column(Enum("success", "error", "no_results"))
+    status: Mapped[str] = mapped_column(
+        Enum("success", "error", "no_results", name="search_query_status")
+    )
     jobs_found: Mapped[int] = mapped_column(Integer)
     num_relevant: Mapped[Optional[int]] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

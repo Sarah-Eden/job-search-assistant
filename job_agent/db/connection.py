@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import tomllib
 import os
 
-BASE_DIR = Path(__file__).parent.parent
+BASE_DIR = Path(__file__).parent.parent.parent
 
 
 def get_engine():

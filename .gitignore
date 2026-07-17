@@ -4,7 +4,10 @@ data/
 .venv/
 .env
 config.toml
+profile.md
+
 
 generate_letter.py
 temp.py
 tests/
+eval/
