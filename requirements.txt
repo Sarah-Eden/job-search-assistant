@@ -7,3 +7,4 @@ beautifulsoup4 = 4.15.0
 pydantic = 2.13.4
 SQLAlchemy = 2.0.51
 psycopg[binary] = 3.3.4
+alembic = 1.18.5
