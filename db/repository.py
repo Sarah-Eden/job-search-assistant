@@ -115,6 +115,9 @@ class JobRepository:
                 record = session.scalars(stmt).one()
                 record.is_relevant = is_relevant
 
+                if not is_relevant:
+                    record.review_status = "declined"
+
                 new_score = Score(
                     job_id=job_record.id, score=score, score_details=score_details
                 )
@@ -126,3 +129,10 @@ class JobRepository:
                 f"Error occurred when saving new score for job id: {job_record.id} {e}"
             )
             raise
+
+    def get_new_relevant_jobs(self):
+        with Session(self.engine) as session:
+            stmt = select(Job).where(
+                Job.is_relevant.is_(True), Job.review_status == "new"
+            )
+            return [JobRecord.model_validate(job) for job in session.scalars(stmt)]
