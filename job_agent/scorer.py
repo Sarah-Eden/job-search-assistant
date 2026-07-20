@@ -60,8 +60,8 @@ def score_job(job_data: JobRecord):
 
 
 if __name__ == "__main__":
-    from job_agent.db.connection import get_engine
-    from job_agent.db.repository import JobRepository
+    from db.connection import get_engine
+    from db.repository import JobRepository
 
     engine = get_engine()
     repo = JobRepository(engine)

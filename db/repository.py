@@ -1,7 +1,7 @@
 from sqlalchemy import insert, null, or_, select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
-from job_agent.db.schema import (
+from db.schema import (
     Job,
     Score,
     Application,

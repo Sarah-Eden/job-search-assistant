@@ -1,6 +1,6 @@
 from job_agent.fetcher import fetch_all_jobs
-from job_agent.db.repository import JobRepository
-from job_agent.db.connection import get_engine
+from db.repository import JobRepository
+from db.connection import get_engine
 
 
 def main():
