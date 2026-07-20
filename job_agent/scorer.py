@@ -2,7 +2,7 @@ from anthropic import Anthropic
 from dotenv import load_dotenv
 from job_agent.models import JobRecord
 from pathlib import Path
-import os
+import os, json
 
 BASE_DIR = Path(__file__).parent.parent
 
@@ -55,17 +55,11 @@ def score_job(job_data: JobRecord):
         ],
         messages=[{"role": "user", "content": job_text}],
     )
-    print(response.usage)
-    return response.content[0].text
 
+    response_text = response.content[0].text
 
-if __name__ == "__main__":
-    from db.connection import get_engine
-    from db.repository import JobRepository
+    if response_text.startswith("```"):
+        response_text = response_text.split("\n", 1)[1]
+        response_text = response_text.rsplit("```", 1)[0]
 
-    engine = get_engine()
-    repo = JobRepository(engine)
-    test_job = repo.get_unscored_jobs()[0]
-
-    result = score_job(test_job)
-    print(result)
+    return json.loads(response_text)
