@@ -35,6 +35,9 @@ class Job(Base):
     expiry_date: Mapped[Optional[date]] = mapped_column(Date)
     application_url: Mapped[str] = mapped_column(Text, unique=True)
     is_relevant: Mapped[Optional[bool]] = mapped_column(Boolean)
+    review_status: Mapped[str] = mapped_column(
+        Enum("new", "accepted", "declined", name="review_status"), server_default="new"
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
 
