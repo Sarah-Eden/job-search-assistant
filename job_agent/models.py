@@ -61,7 +61,7 @@ class JobPosting(BaseModel):
         else:
             return datetime.fromisoformat(value).date()
 
-    @field_validator("description", mode="before")
+    @field_validator("description", "title", mode="before")
     @classmethod
     def remove_html(cls, text):
         return BeautifulSoup(text, "html.parser").get_text(separator=" ")
