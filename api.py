@@ -14,15 +14,10 @@ app.add_middleware(
 )
 
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
-
-
 def get_repository() -> JobRepository:
     return JobRepository(engine)
 
 
-@app.get("/jobs-new")
+@app.get("/new-jobs")
 def get_new_jobs(repo: JobRepository = Depends(get_repository)) -> list[JobRecord]:
     return repo.get_new_relevant_jobs()
