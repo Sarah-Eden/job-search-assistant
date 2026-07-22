@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 function JobList() {
   const [jobs, setJobs] = useState<any[]>([]);
@@ -10,13 +11,16 @@ function JobList() {
   }, []);
 
   return (
-    <div>
-      {jobs.map((job) => (
-        <div key={job.id}>
-          {job.company_name}: {job.title}
-        </div>
-      ))}
-    </div>
+    <Card>
+      <CardHeader>{/* Filter name & count */}</CardHeader>
+      <CardContent>
+        {jobs.map((job) => (
+          <div key={job.id} className="border-t py-2">
+            {job.company_name} - {job.title}
+          </div>
+        ))}
+      </CardContent>
+    </Card>
   );
 }
 
