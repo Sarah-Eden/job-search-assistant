@@ -10,7 +10,8 @@ from db.schema import (
     JobSearchQuery,
 )
 from job_agent.models import JobPosting, JobRecord, JobProcessResult
-from datetime import date
+from datetime import datetime, date, time
+from typing import Optional
 import logging
 
 logger = logging.getLogger(__name__)
@@ -130,9 +131,35 @@ class JobRepository:
             )
             raise
 
-    def get_new_relevant_jobs(self):
+    def get_jobs(
+        self,
+        is_relevant: Optional[bool],
+        review_status: Optional[str],
+        date_type: Optional[str],
+        start_date: Optional[date],
+        end_date: Optional[date],
+    ):
         with Session(self.engine) as session:
-            stmt = select(Job).where(
-                Job.is_relevant.is_(True), Job.review_status == "new"
-            )
+            terms = []
+            if is_relevant is not None:
+                terms.append(Job.is_relevant == is_relevant)
+            if review_status is not None:
+                terms.append(Job.review_status == review_status)
+            if date_type is not None:
+                col = getattr(Job, date_type)
+                if start_date is not None:
+                    start = (
+                        datetime.combine(start_date, time.min)
+                        if date_type == "created_at"
+                        else start_date
+                    )
+                    terms.append(col >= start)
+                if end_date is not None:
+                    end = (
+                        datetime.combine(end_date, time(23, 59))
+                        if date_type == "created_at"
+                        else end_date
+                    )
+                    terms.append(col <= end)
+            stmt = select(Job).where(*terms)
             return [JobRecord.model_validate(job) for job in session.scalars(stmt)]
