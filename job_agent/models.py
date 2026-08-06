@@ -3,7 +3,7 @@ from enum import Enum
 from pydantic import BaseModel, Field, AliasChoices, ConfigDict, field_validator
 from datetime import date, datetime
 from bs4 import BeautifulSoup
-from typing import NamedTuple
+from typing import Literal, NamedTuple
 
 
 class JobPosting(BaseModel):
@@ -76,8 +76,20 @@ class JobRecord(BaseModel):
     experience_level: list[str] | None = None
     location: list[str] | None = None
     categories: list[str] | None = None
+    pub_date: date | None = None
     expiry_date: date | None = None
+    created_at: datetime
+    is_relevant: bool | None = None
+    review_status: Literal["new", "accepted", "declined"]
+    application_url: str
     model_config = ConfigDict(validate_by_name=True, from_attributes=True)
+
+
+class JobHeader(BaseModel):
+    id: int
+    title: str
+    company_name: str | None = None
+    review_status: Literal["new", "accepted", "declined"]
 
 
 class JobSearchResults(BaseModel):

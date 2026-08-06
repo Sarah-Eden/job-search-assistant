@@ -162,4 +162,9 @@ class JobRepository:
                     )
                     terms.append(col <= end)
             stmt = select(Job).where(*terms)
-            return [JobRecord.model_validate(job) for job in session.scalars(stmt)]
+            return list(session.scalars(stmt))
+
+    def get_job_by_id(self, id: int):
+        with Session(self.engine) as session:
+            stmt = select(Job).where(Job.id == id)
+            return session.scalar(stmt)

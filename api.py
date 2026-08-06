@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from db.connection import get_engine
-from db.repository import JobRepository, JobRecord
+from db.repository import JobRepository
+from job_agent.models import JobHeader, JobRecord
 from datetime import datetime, date
 from typing import Optional, Literal
 
@@ -28,7 +29,7 @@ def get_jobs(
     date_type: Optional[Literal["created_at", "pub_date", "expiry_date"]] = None,
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
-) -> list[JobRecord]:
+) -> list[JobHeader]:
 
     return repo.get_jobs(
         is_relevant=is_relevant,
@@ -37,3 +38,11 @@ def get_jobs(
         start_date=start_date,
         end_date=end_date,
     )
+
+
+@app.get("/jobs/{job_id}")
+def get_job_by_id(
+    job_id: int,
+    repo: JobRepository = Depends(get_repository),
+) -> JobRecord:
+    return repo.get_job_by_id(id=job_id)
