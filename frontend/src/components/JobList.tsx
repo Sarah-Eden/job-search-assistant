@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import type { Filters, JobFilters } from "@/types";
 import { buildJobQueryString } from "@/utils";
 
-function JobList({ filters }: { filters: Filters }) {
+export default function JobList({ filters }: { filters: Filters }) {
   const [jobs, setJobs] = useState<any[]>([]);
 
   useEffect(() => {
@@ -35,5 +35,3 @@ function JobList({ filters }: { filters: Filters }) {
     </Card>
   );
 }
-
-export default JobList;
