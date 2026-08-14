@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import type { Filters, JobFilters } from "@/types";
+import type { Filters } from "@/types";
 import { buildJobQueryString } from "@/utils";
 
 type JobListProps = {
