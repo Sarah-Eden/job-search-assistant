@@ -6,9 +6,14 @@ import { buildJobQueryString } from "@/utils";
 type JobListProps = {
   filters: Filters;
   onSelectJob: (id: number) => void;
+  refreshCounter: number;
 };
 
-export default function JobList({ filters, onSelectJob }: JobListProps) {
+export default function JobList({
+  filters,
+  onSelectJob,
+  refreshCounter,
+}: JobListProps) {
   const [jobs, setJobs] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +31,7 @@ export default function JobList({ filters, onSelectJob }: JobListProps) {
         setError(error.message);
         console.error(error);
       });
-  }, [filters]);
+  }, [filters, refreshCounter]);
 
   const statusBorderColors: Record<string, string> = {
     accepted: "border-l-status-positive",
@@ -35,7 +40,7 @@ export default function JobList({ filters, onSelectJob }: JobListProps) {
   };
 
   return (
-    <Card>
+    <Card className="h-full overflow-y-auto">
       <CardHeader>{error !== null && error}</CardHeader>
       <CardContent>
         {jobs.map((job) => (
