@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from db.connection import get_engine
 from db.repository import JobRepository
-from job_agent.models import JobHeader, JobRecord
+from job_agent.models import JobHeader, JobRecord, JobDetailView
 from datetime import datetime, date
 from typing import Optional, Literal
 
@@ -41,8 +41,18 @@ def get_jobs(
 
 
 @app.get("/jobs/{job_id}")
-def get_job_by_id(
+def get_job_details(
     job_id: int,
     repo: JobRepository = Depends(get_repository),
-) -> JobRecord:
-    return repo.get_job_by_id(id=job_id)
+) -> JobDetailView:
+    job, score, application = repo.get_job_details(id=job_id)
+    return JobDetailView(job=job, score=score, application=application)
+
+
+@app.patch("/jobs/{job_id}")
+def update_job_status(
+    job_id: int,
+    review_status: Literal["accepted", "declined"],
+    repo: JobRepository = Depends(get_repository),
+):
+    repo.update_job_status(id=job_id, review_status=review_status)

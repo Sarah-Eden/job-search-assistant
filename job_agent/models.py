@@ -92,6 +92,29 @@ class JobHeader(BaseModel):
     review_status: Literal["new", "accepted", "declined"]
 
 
+class ScoreRecord(BaseModel):
+    id: int
+    score: float
+    score_details: str
+    model_config = ConfigDict(validate_by_name=True, from_attributes=True)
+
+
+class ApplicationRecord(BaseModel):
+    id: int
+    portal_available: bool
+    date_applied: date | None = None
+    status: Literal["pending", "applied", "interviewing", "rejected", "withdrawn"]
+    response_received: bool
+    response_date: date | None = None
+    model_config = ConfigDict(validate_by_name=True, from_attributes=True)
+
+
+class JobDetailView(BaseModel):
+    job: JobRecord
+    score: ScoreRecord | None = None
+    application: ApplicationRecord | None = None
+
+
 class JobSearchResults(BaseModel):
     jobs: list[JobPosting]
 

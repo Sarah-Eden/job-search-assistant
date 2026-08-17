@@ -164,7 +164,15 @@ class JobRepository:
             stmt = select(Job).where(*terms)
             return list(session.scalars(stmt))
 
-    def get_job_by_id(self, id: int):
+    def update_job_status(self, id, review_status):
         with Session(self.engine) as session:
-            stmt = select(Job).where(Job.id == id)
-            return session.scalar(stmt)
+            record = session.scalars(select(Job).where(Job.id == id)).one()
+            record.review_status = review_status
+            session.commit()
+
+    def get_job_details(self, id):
+        with Session(self.engine) as session:
+            job = session.scalars(select(Job).where(Job.id == id)).one()
+            score = job.score
+            application = job.application
+            return job, score, application

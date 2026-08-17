@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import date, datetime
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import (
     ForeignKey,
     Boolean,
@@ -39,6 +39,8 @@ class Job(Base):
         Enum("new", "accepted", "declined", name="review_status"), server_default="new"
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    score: Mapped[Optional["Score"]] = relationship(back_populates="job")
+    application: Mapped[Optional["Application"]] = relationship(back_populates="job")
 
 
 class Score(Base):
@@ -48,6 +50,7 @@ class Score(Base):
     score: Mapped[float] = mapped_column(Float)
     score_details: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    job: Mapped["Job"] = relationship(back_populates="score")
 
 
 class Application(Base):
@@ -73,6 +76,7 @@ class Application(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime, onupdate=func.now()
     )
+    job: Mapped["Job"] = relationship(back_populates="application")
 
 
 class CoverLetter(Base):
