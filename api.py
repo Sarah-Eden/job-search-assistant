@@ -56,3 +56,8 @@ def update_job_status(
     repo: JobRepository = Depends(get_repository),
 ):
     repo.update_job_status(id=job_id, review_status=review_status)
+
+
+@app.post("/applications")
+def create_application(job_id: int, repo: JobRepository = Depends(get_repository)):
+    repo.create_application(job_id)
