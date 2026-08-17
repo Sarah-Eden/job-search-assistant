@@ -69,6 +69,7 @@ class Application(Base):
             name="application_status",
         ),
         nullable=False,
+        server_default="pending",
     )
     response_received: Mapped[bool] = mapped_column(Boolean, default=False)
     response_date: Mapped[Optional[date]] = mapped_column(Date)

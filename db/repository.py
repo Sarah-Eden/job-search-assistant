@@ -176,3 +176,19 @@ class JobRepository:
             score = job.score
             application = job.application
             return job, score, application
+
+    def create_application(self, id):
+        try:
+            with Session(self.engine) as session:
+                app_record = session.scalars(
+                    select(Application).where(Application.job_id == id)
+                ).first()
+
+                if app_record is None:
+                    app = Application(job_id=id)
+                    session.add(app)
+                    session.commit()
+
+        except Exception as e:
+            logger.error(f"Unexpected error creating new search query: {e}")
+            raise

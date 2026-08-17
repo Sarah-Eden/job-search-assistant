@@ -8,6 +8,7 @@ import {
   CardFooter,
 } from "./ui/card";
 import { Button } from "./ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 
 export default function DetailView({
   selectedJobId,
@@ -90,27 +91,41 @@ export default function DetailView({
         )}
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-4 overflow-y-auto min-h-0">
-        <div className="flex justify-between">
-          <span>
-            <b>AI Score:</b> {record.score ? record.score.score : "N/A"}
-          </span>
-          <span>
-            <b>Posted:</b> {record.job.pub_date}
-          </span>
-        </div>
+      <Tabs defaultValue="details" className="flex-1 min-h-0 overflow-y-auto">
+        <TabsList className="mx-auto">
+          <TabsTrigger value="details">Job Details</TabsTrigger>
+          {record.job.review_status === "accepted" && (
+            <TabsTrigger value="application">Application</TabsTrigger>
+          )}
+        </TabsList>
 
-        {record.score && (
-          <div className="col-span-2">
-            <p className="font-semibold">Score Details:</p>
-            <p className="leading-relaxed">{record.score.score_details}</p>
-          </div>
-        )}
-        <div className="col-span-2">
-          <p className="font-semibold">Job Description</p>
-          <p className="leading-relaxed">{record.job.description}</p>
-        </div>
-      </CardContent>
+        <TabsContent value="details">
+          <CardContent className="flex flex-col gap-4 overflow-y-auto min-h-0">
+            <div className="flex justify-between">
+              <span>
+                <b>AI Score:</b> {record.score ? record.score.score : "N/A"}
+              </span>
+              <span>
+                <b>Posted:</b> {record.job.pub_date}
+              </span>
+            </div>
+
+            {record.score && (
+              <div className="col-span-2">
+                <p className="font-semibold">Score Details:</p>
+                <p className="leading-relaxed">{record.score.score_details}</p>
+              </div>
+            )}
+            <div className="col-span-2">
+              <p className="font-semibold">Job Description</p>
+              <p className="leading-relaxed">{record.job.description}</p>
+            </div>
+          </CardContent>
+        </TabsContent>
+        <TabsContent value="application">
+          {/* Placeholder for application fields */}
+        </TabsContent>
+      </Tabs>
     </Card>
   );
 }
