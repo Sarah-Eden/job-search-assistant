@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from db.connection import get_engine
 from db.repository import JobRepository
-from job_agent.models import JobHeader, JobRecord, JobDetailView
+from job_agent.models import ApplicationUpdate, JobHeader, JobRecord, JobDetailView
 from datetime import datetime, date
 from typing import Optional, Literal
 
@@ -61,3 +61,14 @@ def update_job_status(
 @app.post("/applications/{job_id}")
 def create_application(job_id: int, repo: JobRepository = Depends(get_repository)):
     repo.create_application(job_id)
+
+
+@app.patch("/applications/{application_id}")
+def update_application(
+    application_id: int,
+    application_update: ApplicationUpdate,
+    repo: JobRepository = Depends(get_repository),
+):
+    repo.update_application(
+        application_id=application_id, application_update=application_update
+    )
