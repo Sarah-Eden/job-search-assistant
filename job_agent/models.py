@@ -101,10 +101,10 @@ class ScoreRecord(BaseModel):
 
 class ApplicationRecord(BaseModel):
     id: int
-    portal_available: bool
+    portal_available: bool | None
     date_applied: date | None = None
     status: Literal["pending", "applied", "interviewing", "rejected", "withdrawn"]
-    response_received: bool
+    response_received: bool | None
     response_date: date | None = None
     model_config = ConfigDict(validate_by_name=True, from_attributes=True)
 
