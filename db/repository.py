@@ -9,7 +9,7 @@ from db.schema import (
     CoverLetter,
     JobSearchQuery,
 )
-from job_agent.models import JobPosting, JobRecord, JobProcessResult
+from job_agent.models import JobPosting, JobRecord, JobProcessResult, ApplicationUpdate
 from datetime import datetime, date, time
 from typing import Optional
 import logging
@@ -190,5 +190,22 @@ class JobRepository:
                     session.commit()
 
         except Exception as e:
-            logger.error(f"Unexpected error creating new search query: {e}")
+            logger.error(f"Unexpected error creating new application: {e}")
+            raise
+
+    def update_application(
+        self, application_update: ApplicationUpdate, application_id: int
+    ):
+        try:
+            with Session(self.engine) as session:
+                app = session.scalars(
+                    select(Application).where(Application.id == application_id)
+                ).one()
+                for field, value in application_update.model_dump(
+                    exclude_unset=True
+                ).items():
+                    setattr(app, field, value)
+                session.commit()
+        except Exception as e:
+            logger.error(f"Error updating application: {e}")
             raise

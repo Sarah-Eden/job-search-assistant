@@ -109,6 +109,17 @@ class ApplicationRecord(BaseModel):
     model_config = ConfigDict(validate_by_name=True, from_attributes=True)
 
 
+class ApplicationUpdate(BaseModel):
+    portal_available: bool | None = None
+    date_applied: date | None = None
+    status: (
+        Literal["pending", "applied", "interviewing", "rejected", "withdrawn"] | None
+    ) = None
+    response_received: bool | None = None
+    response_date: date | None = None
+    model_config = ConfigDict(validate_by_name=True, from_attributes=True)
+
+
 class JobDetailView(BaseModel):
     job: JobRecord
     score: ScoreRecord | None = None
