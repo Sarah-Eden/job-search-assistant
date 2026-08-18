@@ -5,7 +5,6 @@ import {
   CardContent,
   CardTitle,
   CardDescription,
-  CardFooter,
 } from "./ui/card";
 import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
@@ -18,16 +17,12 @@ export default function DetailView({
   onDataUpdate: () => void;
 }) {
   const [record, setRecord] = useState<any>(null);
-  const [reviewStatus, setReviewStatus] = useState(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (selectedJobId === null) return;
+  function getJobDetails() {
     fetch(`http://localhost:8000/jobs/${selectedJobId}`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Request failed: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
         return response.json();
       })
       .then((data) => setRecord(data))
@@ -35,6 +30,11 @@ export default function DetailView({
         setError(error.message);
         console.error(error);
       });
+  }
+
+  useEffect(() => {
+    if (selectedJobId === null) return;
+    getJobDetails();
   }, [selectedJobId]);
 
   if (error !== null) {
@@ -55,7 +55,23 @@ export default function DetailView({
         if (!response.ok) {
           throw new Error(`Request failed: ${response.status}`);
         }
+        getJobDetails();
         onDataUpdate();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function createApplication() {
+    fetch(`http://localhost:8000/applications/${selectedJobId}`, {
+      method: "POST",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`);
+        }
+        getJobDetails();
       })
       .catch((error) => {
         console.error(error);
@@ -73,10 +89,10 @@ export default function DetailView({
           <span>{record.job.employment_type}</span>
           <span>{record.job.location?.join(", ")}</span>
         </CardDescription>
-        {record.job.review_status == "new" && (
+        {record.job.review_status === "new" && (
           <div className="flex justify-between sticky top-0">
             <Button
-              className={"bg-status-positive-foreground"}
+              className={"bg-status-positive-foreground hover:opacity-80"}
               onClick={() => updateJobStatus("accepted")}
             >
               Accept
@@ -89,12 +105,20 @@ export default function DetailView({
             </Button>
           </div>
         )}
+        {record.job.review_status === "accepted" && !record.application && (
+          <Button
+            className="bg-status-positive-foreground"
+            onClick={() => createApplication()}
+          >
+            Create Application
+          </Button>
+        )}
       </CardHeader>
 
       <Tabs defaultValue="details" className="flex-1 min-h-0 overflow-y-auto">
         <TabsList className="mx-auto">
           <TabsTrigger value="details">Job Details</TabsTrigger>
-          {record.job.review_status === "accepted" && (
+          {record.job.review_status === "accepted" && record.application && (
             <TabsTrigger value="application">Application</TabsTrigger>
           )}
         </TabsList>
@@ -122,9 +146,11 @@ export default function DetailView({
             </div>
           </CardContent>
         </TabsContent>
-        <TabsContent value="application">
-          {/* Placeholder for application fields */}
-        </TabsContent>
+        {record.job.review_status === "accepted" && record.application && (
+          <TabsContent value="application">
+            {/* Placeholder for application fields */}
+          </TabsContent>
+        )}
       </Tabs>
     </Card>
   );
