@@ -12,9 +12,11 @@ import ApplicationDetailForm from "./ApplicationDetailForm";
 
 export default function DetailView({
   selectedJobId,
+  onJobClose,
   onDataUpdate,
 }: {
   selectedJobId: number | null;
+  onJobClose: () => void;
   onDataUpdate: () => void;
 }) {
   const [record, setRecord] = useState<any>(null);
@@ -81,6 +83,17 @@ export default function DetailView({
 
   return (
     <Card className="flex flex-col gap-4 h-full">
+      <div className="flex justify-end">
+        <Button
+          className="sm:hidden"
+          variant={"ghost"}
+          size="icon"
+          onClick={onJobClose}
+        >
+          X
+        </Button>
+      </div>
+
       <CardHeader>
         <CardTitle className="flex justify-between">
           <span>{record.job.title}</span>

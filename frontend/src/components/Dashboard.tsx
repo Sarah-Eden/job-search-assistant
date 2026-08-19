@@ -40,6 +40,10 @@ export default function Dashboard() {
     setRefreshCounter((prev) => prev + 1);
   }
 
+  function handleJobClose() {
+    setSelectedJobId(null);
+  }
+
   return (
     <div className="grid grid-rows-[5vh_1fr_5vh] h-screen bg-background gap-4">
       <div className="bg-primary text-primary-foreground flex items-center">
@@ -57,17 +61,22 @@ export default function Dashboard() {
         <div className="bg-sidebar rounded-xl shadow-sm hidden md:block flex-1 max-w-64">
           <Navigation filters={filters} onChange={setFilters} />
         </div>
-        <div className="bg-card rounded-xl shadow-sm h-full min-h-0 flex-2">
+        <div
+          className={`${selectedJobId === null ? "block" : "hidden"} sm:block bg-card rounded-xl shadow-sm h-full min-h-0 flex-2`}
+        >
           <JobList
             filters={filters}
             onSelectJob={setSelectedJobId}
             refreshCounter={refreshCounter}
           />
         </div>
-        <div className="bg-card rounded-xl shadow-sm h-full min-h-0 flex-3">
+        <div
+          className={`${selectedJobId === null ? "hidden" : "block"} sm:block bg-card rounded-xl shadow-sm h-full min-h-0 flex-3`}
+        >
           <DetailView
             selectedJobId={selectedJobId}
             onDataUpdate={handleDataUpdate}
+            onJobClose={handleJobClose}
           />
         </div>
       </div>
