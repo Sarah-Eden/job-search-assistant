@@ -8,6 +8,9 @@ import {
 } from "./ui/card";
 import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
+import { useForm } from "react-hook-form";
+import type { ApplicationData } from "@/types";
+import ApplicationDetailForm from "./ApplicationDetailForm";
 
 export default function DetailView({
   selectedJobId,
@@ -92,7 +95,7 @@ export default function DetailView({
         {record.job.review_status === "new" && (
           <div className="flex justify-between sticky top-0">
             <Button
-              className={"bg-status-positive-foreground hover:opacity-80"}
+              className={"bg-status-positive-foreground"}
               onClick={() => updateJobStatus("accepted")}
             >
               Accept
@@ -148,7 +151,10 @@ export default function DetailView({
         </TabsContent>
         {record.job.review_status === "accepted" && record.application && (
           <TabsContent value="application">
-            {/* Placeholder for application fields */}
+            <ApplicationDetailForm
+              application={record.application}
+              onApplicationUpdate={getJobDetails}
+            />
           </TabsContent>
         )}
       </Tabs>
