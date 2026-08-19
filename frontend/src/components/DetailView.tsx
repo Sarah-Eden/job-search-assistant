@@ -8,8 +8,6 @@ import {
 } from "./ui/card";
 import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
-import { useForm } from "react-hook-form";
-import type { ApplicationData } from "@/types";
 import ApplicationDetailForm from "./ApplicationDetailForm";
 
 export default function DetailView({
