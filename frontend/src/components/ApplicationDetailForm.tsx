@@ -140,7 +140,7 @@ export default function ApplicationDetailForm({
         <Button type="submit">Save</Button>
       </form>
       <div
-        className={`text-center text-lg, font-semibold ${messageType === "error" ? "text-status-negative-foreground" : "text-status-positive-foreground"}`}
+        className={`text-center text-lg font-semibold ${messageType === "error" ? "text-status-negative-foreground" : "text-status-positive-foreground"}`}
       >
         {statusMessage !== null && statusMessage}
       </div>
