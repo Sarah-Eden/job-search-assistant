@@ -17,7 +17,7 @@ function InputWrapper({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-muted-foreground">
+      <label className="text-sm font-medium text-sidebar-foreground">
         {label}
       </label>
       {children}
@@ -53,7 +53,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
       <select
         value={filters.view}
         onChange={handleChange}
-        className="border border-input rounded-md bg-background px-3 py-2 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
+        className="border border-input rounded-md bg-card px-3 py-2 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
       >
         <option value="jobs">Jobs</option>
         <option value="applications">Applications</option>
@@ -68,7 +68,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("status", {
                 setValueAs: (v) => (v === "" ? null : v),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value=""> </option>
               <option value="new">New</option>
@@ -81,7 +81,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("relevant", {
                 setValueAs: (v) => (v === "" ? null : v === "true"),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value=""> </option>
               <option value="true">True</option>
@@ -93,7 +93,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("dateType", {
                 setValueAs: (v) => (v === "" ? null : v),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value=""> </option>
               <option value="created_at">Created</option>
@@ -108,7 +108,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("startDate", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </InputWrapper>
           <InputWrapper label="To:">
@@ -117,7 +117,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("endDate", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </InputWrapper>
           <Button type="submit">Apply</Button>
@@ -132,7 +132,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("status", {
                 setValueAs: (v) => (v === "" ? null : v),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value=""> </option>
               <option value="pending">Pending</option>
@@ -147,7 +147,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("portalAvailable", {
                 setValueAs: (v) => (v === "" ? null : v === "true"),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value=""> </option>
               <option value="true">True</option>
@@ -159,7 +159,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("responseReceived", {
                 setValueAs: (v) => (v === "" ? null : v === "true"),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value=""> </option>
               <option value="true">True</option>
@@ -172,7 +172,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("dateAppliedStart", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </InputWrapper>
           <InputWrapper label="To:">
@@ -181,7 +181,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("dateAppliedEnd", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border border-input rounded-md bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </InputWrapper>
           <Button type="submit">Apply</Button>

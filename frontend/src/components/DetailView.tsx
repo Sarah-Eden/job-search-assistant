@@ -106,13 +106,15 @@ export default function DetailView({
         {record.job.review_status === "new" && (
           <div className="flex justify-between sticky top-0">
             <Button
-              className={"bg-status-positive-foreground"}
+              className={"bg-primary"}
               onClick={() => updateJobStatus("accepted")}
             >
               Accept
             </Button>
             <Button
-              className={"bg-status-negative-foreground"}
+              className={
+                "bg-background-secondary hover:bg-foreground-muted text-foreground-secondary"
+              }
               onClick={() => updateJobStatus("declined")}
             >
               Declined
@@ -120,10 +122,7 @@ export default function DetailView({
           </div>
         )}
         {record.job.review_status === "accepted" && !record.application && (
-          <Button
-            className="bg-status-positive-foreground"
-            onClick={() => createApplication()}
-          >
+          <Button className="bg-primary" onClick={() => createApplication()}>
             Create Application
           </Button>
         )}

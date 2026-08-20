@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JobList from "./JobList";
 import Navigation from "./Navigation";
 
@@ -11,6 +11,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./ui/sheet";
+import { Button } from "./ui/button";
+import { Sun, Moon } from "lucide-react";
 
 export default function Dashboard() {
   const [filters, setFilters] = useState<Filters>({
@@ -34,6 +36,7 @@ export default function Dashboard() {
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [displayTheme, setDisplayTheme] = useState<"light" | "dark">("dark");
 
   function handleDataUpdate() {
     setRefreshCounter((prev) => prev + 1);
@@ -43,9 +46,13 @@ export default function Dashboard() {
     setSelectedJobId(null);
   }
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", displayTheme === "dark");
+  }, [displayTheme]);
+
   return (
     <div className="grid grid-rows-[5vh_1fr_5vh] h-screen bg-background gap-4">
-      <div className="bg-primary text-primary-foreground flex items-center">
+      <div className="bg-primary text-primary-foreground flex items-center justify-between">
         <Sheet open={isNavOpen} onOpenChange={setIsNavOpen}>
           <SheetTrigger className="md:hidden pl-4">Filters</SheetTrigger>
           <SheetContent side="left">
@@ -55,6 +62,14 @@ export default function Dashboard() {
             <Navigation filters={filters} onChange={setFilters} />
           </SheetContent>
         </Sheet>
+        <Button
+          className={"ml-auto"}
+          onClick={() =>
+            setDisplayTheme(displayTheme === "dark" ? "light" : "dark")
+          }
+        >
+          {displayTheme === "dark" ? <Sun /> : <Moon />}
+        </Button>
       </div>
       <div className="flex gap-4 min-h-0">
         <div className="bg-sidebar rounded-xl shadow-sm hidden md:block flex-1 max-w-64">

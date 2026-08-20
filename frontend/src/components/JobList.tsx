@@ -34,9 +34,9 @@ export default function JobList({
   }, [filters, refreshCounter]);
 
   const statusBorderColors: Record<string, string> = {
-    accepted: "border-l-status-positive",
-    declined: "border-l-status-negative",
-    new: "border-l-border",
+    accepted: "border-l-success",
+    declined: "border-l-error",
+    new: "border-l-foreground-muted",
   };
 
   return (
@@ -46,7 +46,7 @@ export default function JobList({
         {jobs.map((job) => (
           <Card
             key={job.id}
-            className={`border-l-4 ${statusBorderColors[job.review_status]}`}
+            className={`gap-2 border-l-6 ${statusBorderColors[job.review_status]}`}
             onClick={() => onSelectJob(job.id)}
           >
             {job.company_name} - {job.title}
