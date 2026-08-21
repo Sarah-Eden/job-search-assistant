@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import type { Filters } from "@/types";
 import { buildJobQueryString } from "@/utils";
-
-type JobListProps = {
-  filters: Filters;
-  onSelectJob: (id: number) => void;
-  refreshCounter: number;
-};
 
 export default function JobList({
   filters,
   onSelectJob,
+  selectedJobId,
   refreshCounter,
-}: JobListProps) {
+}: {
+  filters: Filters;
+  onSelectJob: (id: number) => void;
+  selectedJobId: number | null;
+  refreshCounter: number;
+}) {
   const [jobs, setJobs] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,26 +32,34 @@ export default function JobList({
       });
   }, [filters, refreshCounter]);
 
-  const statusBorderColors: Record<string, string> = {
-    accepted: "border-l-success",
-    declined: "border-l-error",
-    new: "border-l-foreground-muted",
+  const statusDotColors: Record<string, string> = {
+    accepted: "bg-success/50 text-background",
+    declined: "bg-error/50 text-background",
+    new: "bg-foreground-muted/70 text-background",
   };
 
   return (
-    <Card className="h-full overflow-y-auto">
-      <CardHeader>{error !== null && error}</CardHeader>
-      <CardContent>
+    <div className="h-full overflow-y-auto bg-background">
+      {error !== null && error}
+      <div>
         {jobs.map((job) => (
-          <Card
+          <div
             key={job.id}
-            className={`gap-2 border-l-6 ${statusBorderColors[job.review_status]}`}
+            className={`border-b border-border p-4 cursor-pointer flex flex-col hover:bg-background-secondary ${job.id === selectedJobId ? "bg-secondary" : ""}`}
             onClick={() => onSelectJob(job.id)}
           >
-            {job.company_name} - {job.title}
-          </Card>
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-foreground">{job.title}</span>
+              <span
+                className={`w-6 h-3 rounded-full ${statusDotColors[job.review_status]}`}
+              ></span>
+            </div>
+            <span className="text-sm text-foreground-secondary">
+              {job.company_name}
+            </span>
+          </div>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

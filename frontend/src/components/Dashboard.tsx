@@ -51,8 +51,8 @@ export default function Dashboard() {
   }, [displayTheme]);
 
   return (
-    <div className="grid grid-rows-[5vh_1fr_5vh] h-screen bg-background gap-4">
-      <div className="bg-primary text-primary-foreground flex items-center justify-between">
+    <div className="grid grid-rows-[5vh_1fr_5vh] h-screen bg-background">
+      <div className="bg-card border-2 border-border text-primary-foreground flex items-center justify-between">
         <Sheet open={isNavOpen} onOpenChange={setIsNavOpen}>
           <SheetTrigger className="md:hidden pl-4">Filters</SheetTrigger>
           <SheetContent side="left">
@@ -71,16 +71,17 @@ export default function Dashboard() {
           {displayTheme === "dark" ? <Sun /> : <Moon />}
         </Button>
       </div>
-      <div className="flex gap-4 min-h-0">
-        <div className="bg-sidebar rounded-xl shadow-sm hidden md:block flex-1 max-w-64">
+      <div className="flex min-h-0">
+        <div className="bg-card border-2 border-border rounded-xl hidden md:block flex-1 max-w-64">
           <Navigation filters={filters} onChange={setFilters} />
         </div>
         <div
-          className={`${selectedJobId === null ? "block" : "hidden"} sm:block bg-card rounded-xl shadow-sm h-full min-h-0 flex-2`}
+          className={`bg-background border-2 border-border ${selectedJobId === null ? "block" : "hidden"}sm:block h-full min-h-0 flex-2`}
         >
           <JobList
             filters={filters}
             onSelectJob={setSelectedJobId}
+            selectedJobId={selectedJobId}
             refreshCounter={refreshCounter}
           />
         </div>
