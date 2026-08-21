@@ -7,23 +7,7 @@ import type {
 } from "@/types";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-
-function InputWrapper({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-sidebar-foreground">
-        {label}
-      </label>
-      {children}
-    </div>
-  );
-}
+import InputWrapper from "./InputWrapper";
 
 export default function Navigation({ filters, onChange }: NavigationProps) {
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -48,12 +32,15 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
     onChange(updated);
   }
 
+  const inputStyle =
+    "border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring";
+
   return (
     <div className="flex flex-col gap-4 p-4">
       <select
         value={filters.view}
         onChange={handleChange}
-        className="border-2 border-border bg-card px-3 py-2 text-foreground font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
+        className={inputStyle}
       >
         <option value="jobs">Jobs</option>
         <option value="applications">Applications</option>
@@ -68,7 +55,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("status", {
                 setValueAs: (v) => (v === "" ? null : v),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value=""> </option>
               <option value="new">New</option>
@@ -81,7 +68,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("relevant", {
                 setValueAs: (v) => (v === "" ? null : v === "true"),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value=""> </option>
               <option value="true">True</option>
@@ -93,7 +80,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("dateType", {
                 setValueAs: (v) => (v === "" ? null : v),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value=""> </option>
               <option value="created_at">Created</option>
@@ -108,7 +95,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("startDate", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             />
           </InputWrapper>
           <InputWrapper label="To:">
@@ -117,7 +104,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerJob("endDate", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             />
           </InputWrapper>
           <Button type="submit">Apply</Button>
@@ -132,7 +119,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("status", {
                 setValueAs: (v) => (v === "" ? null : v),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value=""> </option>
               <option value="pending">Pending</option>
@@ -147,7 +134,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("portalAvailable", {
                 setValueAs: (v) => (v === "" ? null : v === "true"),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value=""> </option>
               <option value="true">True</option>
@@ -159,7 +146,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("responseReceived", {
                 setValueAs: (v) => (v === "" ? null : v === "true"),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value=""> </option>
               <option value="true">True</option>
@@ -172,7 +159,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("dateAppliedStart", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             />
           </InputWrapper>
           <InputWrapper label="To:">
@@ -181,7 +168,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               {...registerApplication("dateAppliedEnd", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             />
           </InputWrapper>
           <Button type="submit">Apply</Button>

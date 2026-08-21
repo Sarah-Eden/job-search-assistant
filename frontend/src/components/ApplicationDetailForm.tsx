@@ -3,6 +3,8 @@ import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import type { ApplicationData } from "@/types";
 import { useEffect, useState } from "react";
+import InputWrapper from "./InputWrapper";
+import { Input } from "@base-ui/react";
 
 export default function ApplicationDetailForm({
   application,
@@ -54,6 +56,9 @@ export default function ApplicationDetailForm({
     return () => clearTimeout(timer);
   }, [statusMessage]);
 
+  const inputStyle =
+    "border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring";
+
   return (
     <CardContent>
       <form
@@ -61,15 +66,12 @@ export default function ApplicationDetailForm({
         className="flex flex-col gap-4 overflow-y-auto min-h-0"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-muted-foreground">
-              Status:
-            </label>
+          <InputWrapper label="Status">
             <select
               {...register("status", {
                 setValueAs: (v) => (v === "" ? null : v),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value="pending">Pending</option>
               <option value="applied">Applied</option>
@@ -77,65 +79,53 @@ export default function ApplicationDetailForm({
               <option value="rejected">Rejected</option>
               <option value="withdrawn">Withdrawn</option>
             </select>
-          </div>
+          </InputWrapper>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-muted-foreground">
-              Application Portal:
-            </label>
+          <InputWrapper label="Application Portal:">
             <select
               {...register("portal_available", {
                 setValueAs: (v) => (v === "" ? null : v === "true"),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value=""></option>
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
-          </div>
+          </InputWrapper>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-muted-foreground">
-              Date Applied:
-            </label>
+          <InputWrapper label="Date Applied:">
             <input
               type="date"
               {...register("date_applied", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             />
-          </div>
+          </InputWrapper>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-muted-foreground">
-              Response Received:
-            </label>
+          <InputWrapper label="Response Received:">
             <select
               {...register("response_received", {
                 setValueAs: (v) => (v === "" ? null : v === "true"),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             >
               <option value=""></option>
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
-          </div>
+          </InputWrapper>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-muted-foreground">
-              Response Date:
-            </label>
+          <InputWrapper label="Response Date:">
             <input
               type="date"
               {...register("response_date", {
                 setValueAs: (v) => (v === "" ? null : new Date(v)),
               })}
-              className="border border-input rounded-md bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className={inputStyle}
             />
-          </div>
+          </InputWrapper>
         </div>
         <Button type="submit">Save</Button>
       </form>

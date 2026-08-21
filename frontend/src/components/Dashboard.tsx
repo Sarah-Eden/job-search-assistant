@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import JobList from "./JobList";
 import Navigation from "./Navigation";
-
 import type { Filters } from "@/types";
 import DetailView from "./DetailView";
 import {
@@ -51,7 +50,7 @@ export default function Dashboard() {
   }, [displayTheme]);
 
   return (
-    <div className="grid grid-rows-[5vh_1fr_5vh] h-screen bg-background">
+    <div className="grid grid-rows-[5vh_1fr_5vh] h-screen bg-background border-2 border-border">
       <div className="bg-card border-2 border-border text-primary-foreground flex items-center justify-between">
         <Sheet open={isNavOpen} onOpenChange={setIsNavOpen}>
           <SheetTrigger className="md:hidden pl-4">Filters</SheetTrigger>
@@ -86,7 +85,7 @@ export default function Dashboard() {
           />
         </div>
         <div
-          className={`${selectedJobId === null ? "hidden" : "block"} sm:block bg-card rounded-xl shadow-sm h-full min-h-0 flex-3`}
+          className={`${selectedJobId === null ? "hidden" : "block"} sm:block bg-background rounded-xl shadow-sm h-full min-h-0 flex-3`}
         >
           <DetailView
             selectedJobId={selectedJobId}
