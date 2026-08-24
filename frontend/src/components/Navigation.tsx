@@ -7,7 +7,7 @@ import type {
 } from "@/types";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import InputWrapper from "./InputWrapper";
+import InputWrapper, { inputStyle } from "./InputWrapper";
 
 export default function Navigation({ filters, onChange }: NavigationProps) {
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -31,9 +31,6 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
     const updated = { ...filters, applicationFilters: data };
     onChange(updated);
   }
-
-  const inputStyle =
-    "border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring";
 
   return (
     <div className="flex flex-col gap-4 p-4">

@@ -3,8 +3,7 @@ import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import type { ApplicationData } from "@/types";
 import { useEffect, useState } from "react";
-import InputWrapper from "./InputWrapper";
-import { Input } from "@base-ui/react";
+import InputWrapper, { inputStyle } from "./InputWrapper";
 
 export default function ApplicationDetailForm({
   application,
@@ -55,9 +54,6 @@ export default function ApplicationDetailForm({
     }, 3000);
     return () => clearTimeout(timer);
   }, [statusMessage]);
-
-  const inputStyle =
-    "border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring";
 
   return (
     <CardContent>
@@ -130,7 +126,7 @@ export default function ApplicationDetailForm({
         <Button type="submit">Save</Button>
       </form>
       <div
-        className={`text-center text-lg font-semibold ${messageType === "error" ? "text-status-negative-foreground" : "text-status-positive-foreground"}`}
+        className={`text-center text-lg font-semibold ${messageType === "error" ? "text-error" : "text-success"}`}
       >
         {statusMessage !== null && statusMessage}
       </div>
