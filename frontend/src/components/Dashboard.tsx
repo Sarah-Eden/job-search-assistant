@@ -75,7 +75,7 @@ export default function Dashboard() {
           <Navigation filters={filters} onChange={setFilters} />
         </div>
         <div
-          className={`bg-background border-2 border-border ${selectedJobId === null ? "block" : "hidden"}sm:block h-full min-h-0 flex-2`}
+          className={`bg-background border-2 border-border ${selectedJobId === null ? "block" : "hidden"} sm:block h-full min-h-0 flex-2`}
         >
           <JobList
             filters={filters}

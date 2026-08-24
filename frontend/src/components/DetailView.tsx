@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "./ui/card";
-import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import ApplicationDetailForm from "./ApplicationDetailForm";
 
@@ -78,14 +76,12 @@ export default function DetailView({
   return (
     <div className="flex flex-col gap-4 h-full px-10 pt-4">
       <div className="flex justify-end">
-        <Button
-          className="sm:hidden"
-          variant={"ghost"}
-          size="icon"
+        <button
+          className="sm:hidden text-foreground hover:bg-muted hover:text-foreground"
           onClick={onJobClose}
         >
           X
-        </Button>
+        </button>
       </div>
 
       <div className="font-heading text-foreground font-medium flex justify-between">
@@ -93,7 +89,7 @@ export default function DetailView({
         <span>{record.job.company_name}</span>
       </div>
 
-      <div className="flex justify-between text-sm text-muted-foreground">
+      <div className="flex justify-between text-sm text-foreground-muted">
         <span>
           {" "}
           <b>Posted:</b> {record.job.pub_date}
@@ -112,26 +108,29 @@ export default function DetailView({
 
       {record.job.review_status === "new" && (
         <div className="flex justify-between sticky top-0">
-          <Button
-            className={"bg-primary"}
+          <button
+            className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
             onClick={() => updateJobStatus("accepted")}
           >
             Accept
-          </Button>
-          <Button
+          </button>
+          <button
             className={
-              "bg-background-secondary hover:bg-foreground-muted text-foreground-secondary"
+              "bg-background border border-foreground-secondary hover:bg-foreground-muted text-foreground-secondary rounded-md px-3 py-2"
             }
             onClick={() => updateJobStatus("declined")}
           >
-            Declined
-          </Button>
+            Decline
+          </button>
         </div>
       )}
       {record.job.review_status === "accepted" && !record.application && (
-        <Button className="bg-primary" onClick={() => createApplication()}>
+        <button
+          className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
+          onClick={() => createApplication()}
+        >
           Create Application
-        </Button>
+        </button>
       )}
 
       <Tabs defaultValue="details" className="flex-1 min-h-0 overflow-y-auto">
@@ -143,8 +142,8 @@ export default function DetailView({
         </TabsList>
 
         <TabsContent value="details">
-          <Card className="border border-border rounded-2xl">
-            <CardContent className="flex flex-col gap-4 overflow-y-auto min-h-0 px-8">
+          <div className="border border-border rounded-2xl bg-card text-card-foreground">
+            <div className="flex flex-col gap-4 overflow-y-auto min-h-0 p-8">
               <div className="flex justify-between">
                 <span>
                   <b>AI Score:</b> {record.score ? record.score.score : "N/A"}
@@ -169,8 +168,8 @@ export default function DetailView({
                 <p className="font-semibold">Job Description</p>
                 <p className="leading-relaxed">{record.job.description}</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </TabsContent>
         {record.job.review_status === "accepted" && record.application && (
           <TabsContent value="application">

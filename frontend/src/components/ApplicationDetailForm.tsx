@@ -56,7 +56,7 @@ export default function ApplicationDetailForm({
   }, [statusMessage]);
 
   return (
-    <CardContent>
+    <div>
       <form
         onSubmit={handleSubmit(onApplicationSubmit)}
         className="flex flex-col gap-4 overflow-y-auto min-h-0"
@@ -130,6 +130,6 @@ export default function ApplicationDetailForm({
       >
         {statusMessage !== null && statusMessage}
       </div>
-    </CardContent>
+    </div>
   );
 }
