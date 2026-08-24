@@ -6,7 +6,6 @@ import type {
   ApplicationFilters,
 } from "@/types";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import InputWrapper, { inputStyle } from "./InputWrapper";
 
 export default function Navigation({ filters, onChange }: NavigationProps) {
@@ -104,7 +103,12 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               className={inputStyle}
             />
           </InputWrapper>
-          <Button type="submit">Apply</Button>
+          <button
+            className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
+            type="submit"
+          >
+            Apply
+          </button>
         </form>
       ) : (
         <form
@@ -168,7 +172,12 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
               className={inputStyle}
             />
           </InputWrapper>
-          <Button type="submit">Apply</Button>
+          <button
+            className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
+            type="submit"
+          >
+            Apply
+          </button>
         </form>
       )}
     </div>

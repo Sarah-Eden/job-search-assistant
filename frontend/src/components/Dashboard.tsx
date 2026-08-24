@@ -10,7 +10,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./ui/sheet";
-import { Button } from "./ui/button";
 import { Sun, Moon } from "lucide-react";
 
 export default function Dashboard() {
@@ -61,14 +60,14 @@ export default function Dashboard() {
             <Navigation filters={filters} onChange={setFilters} />
           </SheetContent>
         </Sheet>
-        <Button
-          className={"ml-auto"}
+        <button
+          className="text-foreground ml-auto p-2"
           onClick={() =>
             setDisplayTheme(displayTheme === "dark" ? "light" : "dark")
           }
         >
           {displayTheme === "dark" ? <Sun /> : <Moon />}
-        </Button>
+        </button>
       </div>
       <div className="flex min-h-0">
         <div className="bg-card border-2 border-border rounded-xl hidden md:block flex-1 max-w-64">
