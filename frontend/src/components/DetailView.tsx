@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import ApplicationDetailForm from "./ApplicationDetailForm";
+import type { JobDetailView } from "@/types";
 
 export default function DetailView({
   selectedJobId,
@@ -11,7 +12,7 @@ export default function DetailView({
   onJobClose: () => void;
   onDataUpdate: () => void;
 }) {
-  const [record, setRecord] = useState<any>(null);
+  const [record, setRecord] = useState<JobDetailView | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   function getJobDetails() {
@@ -108,12 +109,7 @@ export default function DetailView({
 
       {record.job.review_status === "new" && (
         <div className="flex justify-between sticky top-0">
-          <button
-            className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
-            onClick={() => updateJobStatus("accepted")}
-          >
-            Accept
-          </button>
+          <button onClick={() => updateJobStatus("accepted")}>Accept</button>
           <button
             className={
               "bg-background border border-foreground-secondary hover:bg-foreground-muted text-foreground-secondary rounded-md px-3 py-2"

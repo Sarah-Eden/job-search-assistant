@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Filters } from "@/types";
+import type { Filters, JobHeader } from "@/types";
 import { buildJobQueryString } from "@/utils";
 
 export default function JobList({
@@ -13,7 +13,7 @@ export default function JobList({
   selectedJobId: number | null;
   refreshCounter: number;
 }) {
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<JobHeader[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

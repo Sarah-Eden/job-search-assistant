@@ -32,7 +32,7 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 h-full">
       <select
         value={filters.view}
         onChange={handleChange}
@@ -180,6 +180,9 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
           </button>
         </form>
       )}
+      <button className="bg-card hover:bg-background-secondary rounded-md px-3 py-2 text-foreground border border-border mt-auto">
+        Settings
+      </button>
     </div>
   );
 }
