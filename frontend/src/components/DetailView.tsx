@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import ApplicationDetailForm from "./ApplicationDetailForm";
 import type { JobDetailView } from "@/types";
+import { getJobDetails } from "@/api";
 
 export default function DetailView({
   selectedJobId,
@@ -15,22 +16,22 @@ export default function DetailView({
   const [record, setRecord] = useState<JobDetailView | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  function getJobDetails() {
-    fetch(`http://localhost:8000/jobs/${selectedJobId}`)
-      .then((response) => {
-        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
-        return response.json();
-      })
-      .then((data) => setRecord(data))
-      .catch((error) => {
-        setError(error.message);
-        console.error(error);
-      });
-  }
-
-  useEffect(() => {
+  async function refreshJobDetails() {
     if (selectedJobId === null) return;
-    getJobDetails();
+
+    try {
+      setError(null);
+      const data = await getJobDetails(selectedJobId);
+      setRecord(data);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "An unknown error occurred",
+      );
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    refreshJobDetails();
   }, [selectedJobId]);
 
   if (error !== null) {
@@ -51,7 +52,7 @@ export default function DetailView({
         if (!response.ok) {
           throw new Error(`Request failed: ${response.status}`);
         }
-        getJobDetails();
+        refreshJobDetails();
         onDataUpdate();
       })
       .catch((error) => {
@@ -67,7 +68,7 @@ export default function DetailView({
         if (!response.ok) {
           throw new Error(`Request failed: ${response.status}`);
         }
-        getJobDetails();
+        refreshJobDetails();
       })
       .catch((error) => {
         console.error(error);
@@ -109,7 +110,12 @@ export default function DetailView({
 
       {record.job.review_status === "new" && (
         <div className="flex justify-between sticky top-0">
-          <button onClick={() => updateJobStatus("accepted")}>Accept</button>
+          <button
+            className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
+            onClick={() => updateJobStatus("accepted")}
+          >
+            Accept
+          </button>
           <button
             className={
               "bg-background border border-foreground-secondary hover:bg-foreground-muted text-foreground-secondary rounded-md px-3 py-2"
@@ -129,7 +135,11 @@ export default function DetailView({
         </button>
       )}
 
-      <Tabs defaultValue="details" className="flex-1 min-h-0 overflow-y-auto">
+      <Tabs
+        key={selectedJobId}
+        defaultValue="details"
+        className="flex-1 min-h-0 overflow-y-auto"
+      >
         <TabsList className="mx-auto">
           <TabsTrigger value="details">Job Details</TabsTrigger>
           {record.job.review_status === "accepted" && record.application && (
@@ -171,7 +181,7 @@ export default function DetailView({
           <TabsContent value="application">
             <ApplicationDetailForm
               application={record.application}
-              onApplicationUpdate={getJobDetails}
+              onApplicationUpdate={refreshJobDetails}
             />
           </TabsContent>
         )}

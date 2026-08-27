@@ -1,13 +1,15 @@
+import { CardContent } from "./ui/card";
+import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
-import type { ApplicationData } from "@/types";
+import type { ApplicationUpdate, ApplicationRecord } from "@/types";
 import { useEffect, useState } from "react";
-import InputWrapper, { inputStyle } from "./InputWrapper";
+import InputWrapper from "./InputWrapper";
 
 export default function ApplicationDetailForm({
   application,
   onApplicationUpdate,
 }: {
-  application: any;
+  application: ApplicationRecord;
   onApplicationUpdate: () => void;
 }) {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -15,7 +17,7 @@ export default function ApplicationDetailForm({
     null,
   );
 
-  const { register, handleSubmit } = useForm<ApplicationData>({
+  const { register, handleSubmit } = useForm<ApplicationUpdate>({
     defaultValues: {
       portal_available: application.portal_available,
       status: application.status,
@@ -25,7 +27,7 @@ export default function ApplicationDetailForm({
     },
   });
 
-  function onApplicationSubmit(data: ApplicationData) {
+  function onApplicationSubmit(data: ApplicationUpdate) {
     fetch(`http://localhost:8000/applications/${application.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -53,8 +55,11 @@ export default function ApplicationDetailForm({
     return () => clearTimeout(timer);
   }, [statusMessage]);
 
+  const inputStyle =
+    "border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring";
+
   return (
-    <div>
+    <CardContent>
       <form
         onSubmit={handleSubmit(onApplicationSubmit)}
         className="flex flex-col gap-4 overflow-y-auto min-h-0"
@@ -121,18 +126,13 @@ export default function ApplicationDetailForm({
             />
           </InputWrapper>
         </div>
-        <button
-          className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
-          type="submit"
-        >
-          Save
-        </button>
+        <Button type="submit">Save</Button>
       </form>
       <div
-        className={`text-center text-lg font-semibold ${messageType === "error" ? "text-error" : "text-success"}`}
+        className={`text-center text-lg font-semibold ${messageType === "error" ? "text-status-negative-foreground" : "text-status-positive-foreground"}`}
       >
         {statusMessage !== null && statusMessage}
       </div>
-    </div>
+    </CardContent>
   );
 }

@@ -37,9 +37,17 @@ export type ApplicationRecord = {
   id: number;
   portal_available: boolean | null;
   status: ApplicationStatus;
-  date_applied: string | null;
+  date_applied: Date | null;
   response_received: boolean | null;
-  response_date: string | null;
+  response_date: Date | null;
+};
+
+export type ApplicationUpdate = {
+  portal_available: boolean | null;
+  date_applied: Date | null;
+  status: ApplicationStatus | null;
+  response_received: boolean | null;
+  response_date: Date | null;
 };
 
 export type JobDetailView = {
