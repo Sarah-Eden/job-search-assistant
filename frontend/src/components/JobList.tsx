@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { Filters, JobHeader } from "@/types";
 import { buildJobQueryString } from "@/utils";
+import { getJobs } from "@/api";
 
 export default function JobList({
   filters,
@@ -16,7 +17,20 @@ export default function JobList({
   const [jobs, setJobs] = useState<JobHeader[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  async function handleSetJobs() {
+    try {
+      const data = await getJobs(filters.jobFilters);
+      setJobs(data);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "An unknown error occurred",
+      );
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
+    handleSetJobs();
     const query = buildJobQueryString(filters.jobFilters);
     fetch(`http://localhost:8000/jobs?${query}`)
       .then((response) => {

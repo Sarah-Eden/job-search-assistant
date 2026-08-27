@@ -1,4 +1,11 @@
-import type { ApplicationUpdate, JobDetailView, ReviewStatus } from "@/types";
+import type {
+  ApplicationUpdate,
+  JobDetailView,
+  JobFilters,
+  JobHeader,
+  ReviewStatus,
+} from "@/types";
+import { buildJobQueryString } from "./utils";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -46,4 +53,13 @@ export async function updateApplication(
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`);
   }
+}
+
+export async function getJobs(jobFilters: JobFilters): Promise<JobHeader[]> {
+  const query = buildJobQueryString(jobFilters);
+  const response = await fetch(`${API_URL}/jobs?${query}`);
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return response.json();
 }
