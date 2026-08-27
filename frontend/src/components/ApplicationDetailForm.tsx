@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import type { ApplicationUpdate, ApplicationRecord } from "@/types";
 import { useEffect, useState } from "react";
 import InputWrapper from "./InputWrapper";
+import { updateApplication } from "@/api";
 
 export default function ApplicationDetailForm({
   application,
@@ -27,23 +28,19 @@ export default function ApplicationDetailForm({
     },
   });
 
-  function onApplicationSubmit(data: ApplicationUpdate) {
-    fetch(`http://localhost:8000/applications/${application.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
-        onApplicationUpdate();
-        setStatusMessage("Application update success.");
-        setMessageType("success");
-      })
-      .catch((error) => {
-        console.error(error);
-        setStatusMessage(`Error updating application: ${error.message}`);
-        setMessageType("error");
-      });
+  async function handleApplicationUpdate(data: ApplicationUpdate) {
+    try {
+      await updateApplication(application.id, data);
+      onApplicationUpdate();
+      setStatusMessage("Application update success");
+      setMessageType("success");
+    } catch (error) {
+      console.error(error);
+      setStatusMessage(
+        `Error updating application: ${error instanceof Error ? error.message : "An unknown error occurred"}`,
+      );
+      setMessageType("error");
+    }
   }
 
   useEffect(() => {
@@ -61,7 +58,7 @@ export default function ApplicationDetailForm({
   return (
     <CardContent>
       <form
-        onSubmit={handleSubmit(onApplicationSubmit)}
+        onSubmit={handleSubmit(handleApplicationUpdate)}
         className="flex flex-col gap-4 overflow-y-auto min-h-0"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import ApplicationDetailForm from "./ApplicationDetailForm";
 import type { JobDetailView } from "@/types";
-import { getJobDetails } from "@/api";
+import { getJobDetails, updateJobStatus, createApplication } from "@/api";
 
 export default function DetailView({
   selectedJobId,
@@ -41,38 +41,27 @@ export default function DetailView({
     return null;
   }
 
-  function updateJobStatus(status: "accepted" | "declined") {
-    fetch(
-      `http://localhost:8000/jobs/${selectedJobId}?review_status=${status}`,
-      {
-        method: "PATCH",
-      },
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Request failed: ${response.status}`);
-        }
-        refreshJobDetails();
-        onDataUpdate();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  async function handleJobStatusUpdate(status: "accepted" | "declined") {
+    if (selectedJobId === null) return;
+
+    try {
+      await updateJobStatus(selectedJobId, status);
+      await refreshJobDetails();
+      onDataUpdate();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  function createApplication() {
-    fetch(`http://localhost:8000/applications/${selectedJobId}`, {
-      method: "POST",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Request failed: ${response.status}`);
-        }
-        refreshJobDetails();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  async function handleCreateApplication() {
+    if (selectedJobId === null) return;
+
+    try {
+      await createApplication(selectedJobId);
+      await refreshJobDetails();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -112,7 +101,7 @@ export default function DetailView({
         <div className="flex justify-between sticky top-0">
           <button
             className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
-            onClick={() => updateJobStatus("accepted")}
+            onClick={() => handleJobStatusUpdate("accepted")}
           >
             Accept
           </button>
@@ -120,7 +109,7 @@ export default function DetailView({
             className={
               "bg-background border border-foreground-secondary hover:bg-foreground-muted text-foreground-secondary rounded-md px-3 py-2"
             }
-            onClick={() => updateJobStatus("declined")}
+            onClick={() => handleJobStatusUpdate("declined")}
           >
             Decline
           </button>
@@ -129,7 +118,7 @@ export default function DetailView({
       {record.job.review_status === "accepted" && !record.application && (
         <button
           className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
-          onClick={() => createApplication()}
+          onClick={handleCreateApplication}
         >
           Create Application
         </button>
