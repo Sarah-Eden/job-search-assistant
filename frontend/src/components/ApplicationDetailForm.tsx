@@ -3,6 +3,7 @@ import type { ApplicationUpdate, ApplicationRecord } from "@/types";
 import { useEffect, useState } from "react";
 import InputWrapper from "./InputWrapper";
 import { updateApplication } from "@/api";
+import { inputStyle } from "./InputWrapper";
 
 export default function ApplicationDetailForm({
   application,
@@ -49,9 +50,6 @@ export default function ApplicationDetailForm({
     }, 3000);
     return () => clearTimeout(timer);
   }, [statusMessage]);
-
-  const inputStyle =
-    "border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring";
 
   return (
     <>

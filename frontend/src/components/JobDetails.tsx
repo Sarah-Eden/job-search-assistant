@@ -77,7 +77,7 @@ export default function JobDetails({
             href={record.job.application_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-background border-b text-muted-foreground cursor-pointer"
+            className="bg-background border-b text-foreground-muted cursor-pointer"
           >
             View Job Posting
           </a>
