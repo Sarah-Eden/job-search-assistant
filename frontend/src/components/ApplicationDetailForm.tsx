@@ -1,4 +1,3 @@
-import { CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import type { ApplicationUpdate, ApplicationRecord } from "@/types";
@@ -56,7 +55,7 @@ export default function ApplicationDetailForm({
     "border-2 border-border bg-card px-3 py-2 text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-ring";
 
   return (
-    <CardContent>
+    <>
       <form
         onSubmit={handleSubmit(handleApplicationUpdate)}
         className="flex flex-col gap-4 overflow-y-auto min-h-0"
@@ -130,6 +129,6 @@ export default function ApplicationDetailForm({
       >
         {statusMessage !== null && statusMessage}
       </div>
-    </CardContent>
+    </>
   );
 }

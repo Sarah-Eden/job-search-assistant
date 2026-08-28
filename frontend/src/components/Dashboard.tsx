@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import JobList from "./JobList";
 import Navigation from "./Navigation";
-import type { Filters } from "@/types";
+import type { DetailViewOptions, Filters } from "@/types";
 import DetailView from "./DetailView";
 import {
   Sheet,
@@ -35,6 +35,7 @@ export default function Dashboard() {
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [displayTheme, setDisplayTheme] = useState<"light" | "dark">("dark");
+  const [activeView, setActiveView] = useState<DetailViewOptions>(null);
 
   function handleDataUpdate() {
     setRefreshCounter((prev) => prev + 1);
@@ -78,7 +79,10 @@ export default function Dashboard() {
         >
           <JobList
             filters={filters}
-            onSelectJob={setSelectedJobId}
+            onSelectJob={(id) => {
+              setSelectedJobId(id);
+              setActiveView("job");
+            }}
             selectedJobId={selectedJobId}
             refreshCounter={refreshCounter}
           />
@@ -87,6 +91,7 @@ export default function Dashboard() {
           className={`${selectedJobId === null ? "hidden" : "block"} sm:block bg-background rounded-xl shadow-sm h-full min-h-0 flex-3`}
         >
           <DetailView
+            activeView={activeView}
             selectedJobId={selectedJobId}
             onDataUpdate={handleDataUpdate}
             onJobClose={handleJobClose}

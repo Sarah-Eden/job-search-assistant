@@ -82,3 +82,5 @@ export type NavigationProps = {
   filters: Filters;
   onChange: (filters: Filters) => void;
 };
+
+export type DetailViewOptions = "job" | "settings" | null;

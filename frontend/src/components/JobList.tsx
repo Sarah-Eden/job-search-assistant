@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import type { Filters, JobHeader } from "@/types";
-import { buildJobQueryString } from "@/utils";
 import { getJobs } from "@/api";
 
 export default function JobList({
@@ -31,19 +30,6 @@ export default function JobList({
 
   useEffect(() => {
     handleSetJobs();
-    const query = buildJobQueryString(filters.jobFilters);
-    fetch(`http://localhost:8000/jobs?${query}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Request failed: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => setJobs(data))
-      .catch((error) => {
-        setError(error.message);
-        console.error(error);
-      });
   }, [filters, refreshCounter]);
 
   const statusDotColors: Record<string, string> = {
