@@ -1,4 +1,3 @@
-import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import type { ApplicationUpdate, ApplicationRecord } from "@/types";
 import { useEffect, useState } from "react";
@@ -122,7 +121,12 @@ export default function ApplicationDetailForm({
             />
           </InputWrapper>
         </div>
-        <Button type="submit">Save</Button>
+        <button
+          className="bg-primary hover:bg-secondary-foreground rounded-md px-3 py-2"
+          type="submit"
+        >
+          Save
+        </button>
       </form>
       <div
         className={`text-center text-lg font-semibold ${messageType === "error" ? "text-status-negative-foreground" : "text-status-positive-foreground"}`}
