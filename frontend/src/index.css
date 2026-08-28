@@ -8,19 +8,6 @@
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: "Inter Variable", sans-serif;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -83,15 +70,6 @@
   --foreground-secondary: #374151;
   --foreground-muted: #6b7280;
 
-  --sidebar: #ede9fe;
-  --sidebar-foreground: #1e1b4b;
-  --sidebar-primary: #7c3aed;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ddd6fe;
-  --sidebar-accent-foreground: #5b21b6;
-  --sidebar-border: #ddd6fe;
-  --sidebar-ring: #7c3aed;
-
   --success: #16a34a;
   --warning: #d97706;
   --error: #dc2626;
@@ -122,15 +100,6 @@
   --background-muted: #1e1b4b;
   --foreground-secondary: #ddd6fe;
   --foreground-muted: #a78bfa;
-
-  --sidebar: #1e1b4b;
-  --sidebar-foreground: #f5f3ff;
-  --sidebar-primary: #a78bfa;
-  --sidebar-primary-foreground: #0d0b14;
-  --sidebar-accent: #2e1d6b;
-  --sidebar-accent-foreground: #ddd6fe;
-  --sidebar-border: #2e1d6b;
-  --sidebar-ring: #a78bfa;
 
   --success: #34d399;
   --warning: #fbbf24;
