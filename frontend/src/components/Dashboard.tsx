@@ -61,14 +61,21 @@ export default function Dashboard() {
             <Navigation filters={filters} onChange={setFilters} />
           </SheetContent>
         </Sheet>
-        <button
-          className="text-foreground ml-auto p-2"
-          onClick={() =>
-            setDisplayTheme(displayTheme === "dark" ? "light" : "dark")
-          }
-        >
-          {displayTheme === "dark" ? <Sun /> : <Moon />}
-        </button>
+        <div className="flex gap-3 ml-auto">
+          <button
+            className={`p-2 text-foreground ${displayTheme === "light" ? "bg-secondary" : ""}`}
+            onClick={() => setDisplayTheme("light")}
+          >
+            <Sun />
+          </button>
+
+          <button
+            className={`text-foreground p-2 ${displayTheme === "dark" ? "bg-secondary" : ""}`}
+            onClick={() => setDisplayTheme("dark")}
+          >
+            <Moon />
+          </button>
+        </div>
       </div>
       <div className="flex min-h-0">
         <div className="bg-card border-2 border-border rounded-xl hidden md:block flex-1 max-w-64">
