@@ -23,14 +23,14 @@ def get_engine():
             port=config["database"]["pgsql"]["port"],
             database=config["database"]["pgsql"]["name"],
         )
-        engine = create_engine(url_object, echo=True)
+        engine = create_engine(url_object, echo=False)
 
     elif config["database"]["db"] == "sqlite":
         url_object = URL.create(
             "sqlite+pysqlite",
             database=str(BASE_DIR / config["database"]["sqlite"]["path"]),
         )
-        engine = create_engine(url_object, echo=True)
+        engine = create_engine(url_object, echo=False)
 
     else:
         raise ValueError(

@@ -1,10 +1,13 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 from db.connection import get_engine
 from db.repository import JobRepository
 from job_agent.models import ApplicationUpdate, JobHeader, JobRecord, JobDetailView
-from datetime import datetime, date
+from datetime import date
 from typing import Optional, Literal
+import logging
 
 app = FastAPI()
 engine = get_engine()
@@ -16,9 +19,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+logging.basicConfig(
+    filename="logs/job_agent.log",
+    level=logging.ERROR,
+    format="%(asctime)s %(levelname)s %(message)s",
+)
+logger = logging.getLogger(__name__)
+
 
 def get_repository() -> JobRepository:
     return JobRepository(engine)
+
+
+@app.exception_handler(NoResultFound)
+async def not_found_handler(request: Request, exc: NoResultFound):
+    logger.error(f"Item not found: {request.url.path} params={request.path_params}")
+    return JSONResponse(status_code=404, content={"detail": "Item not found"})
+
+
+@app.exception_handler(SQLAlchemyError)
+async def db_error_handler(request: Request, exc: SQLAlchemyError):
+    logger.error(f"DB error: {request.url.path} params={request.path_params}")
+    return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
 
 @app.get("/jobs")

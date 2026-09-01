@@ -1,12 +1,11 @@
-from sqlalchemy import insert, null, or_, select, update
-from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
+from sqlalchemy import or_, select
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from db.schema import (
     Job,
     Score,
     Application,
     SearchQuery,
-    CoverLetter,
     JobSearchQuery,
 )
 from job_agent.models import JobPosting, JobRecord, JobProcessResult, ApplicationUpdate
@@ -24,22 +23,17 @@ class JobRepository:
     def create_search_query(
         self, query: str, source: str, params: dict, status: str, num_jobs: int
     ):
-        try:
-            with Session(self.engine) as session:
-                search_query = SearchQuery(
-                    query_text=query,
-                    source=source,
-                    parameters=params,
-                    status=status,
-                    jobs_found=num_jobs,
-                )
-                session.add(search_query)
-                session.commit()
-                return search_query.id
-
-        except Exception as e:
-            logger.error(f"Unexpected error creating new search query: {e}")
-            raise
+        with Session(self.engine) as session:
+            search_query = SearchQuery(
+                query_text=query,
+                source=source,
+                parameters=params,
+                status=status,
+                jobs_found=num_jobs,
+            )
+            session.add(search_query)
+            session.commit()
+            return search_query.id
 
     def process_job_posting(self, job_posting: JobPosting, search_query_id: int):
 
@@ -110,26 +104,20 @@ class JobRepository:
     def save_score_results(
         self, job_record: JobRecord, is_relevant: bool, score: float, score_details: str
     ):
-        try:
-            with Session(self.engine) as session:
-                stmt = select(Job).where(Job.id == job_record.id)
-                record = session.scalars(stmt).one()
-                record.is_relevant = is_relevant
 
-                if not is_relevant:
-                    record.review_status = "declined"
+        with Session(self.engine) as session:
+            stmt = select(Job).where(Job.id == job_record.id)
+            record = session.scalars(stmt).one()
+            record.is_relevant = is_relevant
 
-                new_score = Score(
-                    job_id=job_record.id, score=score, score_details=score_details
-                )
-                session.add(new_score)
-                session.commit()
+            if not is_relevant:
+                record.review_status = "declined"
 
-        except SQLAlchemyError as e:
-            logger.error(
-                f"Error occurred when saving new score for job id: {job_record.id} {e}"
+            new_score = Score(
+                job_id=job_record.id, score=score, score_details=score_details
             )
-            raise
+            session.add(new_score)
+            session.commit()
 
     def get_jobs(
         self,
@@ -178,34 +166,25 @@ class JobRepository:
             return job, score, application
 
     def create_application(self, id):
-        try:
-            with Session(self.engine) as session:
-                app_record = session.scalars(
-                    select(Application).where(Application.job_id == id)
-                ).first()
+        with Session(self.engine) as session:
+            app_record = session.scalars(
+                select(Application).where(Application.job_id == id)
+            ).first()
 
-                if app_record is None:
-                    app = Application(job_id=id)
-                    session.add(app)
-                    session.commit()
-
-        except Exception as e:
-            logger.error(f"Unexpected error creating new application: {e}")
-            raise
+            if app_record is None:
+                app = Application(job_id=id)
+                session.add(app)
+                session.commit()
 
     def update_application(
         self, application_update: ApplicationUpdate, application_id: int
     ):
-        try:
-            with Session(self.engine) as session:
-                app = session.scalars(
-                    select(Application).where(Application.id == application_id)
-                ).one()
-                for field, value in application_update.model_dump(
-                    exclude_unset=True
-                ).items():
-                    setattr(app, field, value)
-                session.commit()
-        except Exception as e:
-            logger.error(f"Error updating application: {e}")
-            raise
+        with Session(self.engine) as session:
+            app = session.scalars(
+                select(Application).where(Application.id == application_id)
+            ).one()
+            for field, value in application_update.model_dump(
+                exclude_unset=True
+            ).items():
+                setattr(app, field, value)
+            session.commit()
