@@ -113,3 +113,11 @@ class JobSearchQuery(Base):
         ForeignKey("search_queries.id"), index=True
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class JobApiParams(Base):
+    __tablename__ = "job_api_params"
+    source: Mapped[str] = mapped_column(String(255), primary_key=True)
+    param_name: Mapped[str] = mapped_column(String(255), primary_key=True)
+    param_value: Mapped[Optional[list]] = mapped_column(JSON)
+    accepted_values: Mapped[Optional[list]] = mapped_column(JSON)
