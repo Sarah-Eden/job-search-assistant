@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 from db.connection import get_engine
-from db.repository import JobRepository
+from db.job_repo import JobRepository
 from job_agent.models import ApplicationUpdate, JobHeader, JobRecord, JobDetailView
 from datetime import date
 from typing import Optional, Literal
