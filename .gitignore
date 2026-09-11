@@ -5,6 +5,7 @@ data/
 .env
 config.toml
 profile.md
+project_tree.txt
 
 
 generate_letter.py
