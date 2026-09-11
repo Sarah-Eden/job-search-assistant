@@ -36,9 +36,8 @@ class JobRepository:
             return search_query.id
 
     def process_job_posting(self, job_posting: JobPosting, search_query_id: int):
-
-        try:
-            with Session(self.engine) as session:
+        with Session(self.engine) as session:
+            try:
                 stmt = select(Job).where(
                     Job.application_url == job_posting.application_url
                 )
@@ -86,12 +85,12 @@ class JobRepository:
                             else:
                                 return JobProcessResult.DUPLICATE_REPOSTED
 
-        except IntegrityError:
-            session.rollback()
-            logger.error(
-                f"Unexpected integrity error for {job_posting.application_url}"
-            )
-            return JobProcessResult.ERROR
+            except IntegrityError:
+                session.rollback()
+                logger.error(
+                    f"Unexpected integrity error for {job_posting.application_url}"
+                )
+                return JobProcessResult.ERROR
 
     def get_unscored_jobs(self):
         with Session(self.engine) as session:

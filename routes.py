@@ -4,7 +4,14 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 from db.connection import get_engine
 from db.job_repo import JobRepository
-from job_agent.models import ApplicationUpdate, JobHeader, JobRecord, JobDetailView
+from db.settings_repo import SettingsRepository
+from job_agent.models import (
+    ApplicationUpdate,
+    JobHeader,
+    JobRecord,
+    JobDetailView,
+    JobSearchParams,
+)
 from datetime import date
 from typing import Optional, Literal
 import logging
@@ -27,8 +34,12 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def get_repository() -> JobRepository:
+def get_job_repository() -> JobRepository:
     return JobRepository(engine)
+
+
+def get_settings_repository() -> SettingsRepository:
+    return SettingsRepository(engine)
 
 
 @app.exception_handler(NoResultFound)
@@ -45,7 +56,7 @@ async def db_error_handler(request: Request, exc: SQLAlchemyError):
 
 @app.get("/jobs")
 def get_jobs(
-    repo: JobRepository = Depends(get_repository),
+    repo: JobRepository = Depends(get_job_repository),
     is_relevant: Optional[bool] = None,
     review_status: Optional[Literal["new", "accepted", "declined"]] = None,
     date_type: Optional[Literal["created_at", "pub_date", "expiry_date"]] = None,
@@ -65,7 +76,7 @@ def get_jobs(
 @app.get("/jobs/{job_id}")
 def get_job_details(
     job_id: int,
-    repo: JobRepository = Depends(get_repository),
+    repo: JobRepository = Depends(get_job_repository),
 ) -> JobDetailView:
     job, score, application = repo.get_job_details(id=job_id)
     return JobDetailView(job=job, score=score, application=application)
@@ -75,13 +86,13 @@ def get_job_details(
 def update_job_status(
     job_id: int,
     review_status: Literal["accepted", "declined"],
-    repo: JobRepository = Depends(get_repository),
+    repo: JobRepository = Depends(get_job_repository),
 ):
     repo.update_job_status(id=job_id, review_status=review_status)
 
 
 @app.post("/applications/{job_id}")
-def create_application(job_id: int, repo: JobRepository = Depends(get_repository)):
+def create_application(job_id: int, repo: JobRepository = Depends(get_job_repository)):
     repo.create_application(job_id)
 
 
@@ -89,8 +100,15 @@ def create_application(job_id: int, repo: JobRepository = Depends(get_repository
 def update_application(
     application_id: int,
     application_update: ApplicationUpdate,
-    repo: JobRepository = Depends(get_repository),
+    repo: JobRepository = Depends(get_job_repository),
 ):
     repo.update_application(
         application_id=application_id, application_update=application_update
     )
+
+
+@app.get("/settings/search_params")
+def get_job_search_params(
+    repo: SettingsRepository = Depends(get_settings_repository),
+) -> list[JobSearchParams]:
+    return repo.get_all_search_params()
