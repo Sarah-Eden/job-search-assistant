@@ -1,0 +1,2 @@
+class HarnessViolation(BaseException):
+    pass
