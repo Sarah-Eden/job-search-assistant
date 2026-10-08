@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import JobList from "./JobList";
 import Navigation from "./Navigation";
-import type { DetailViewOptions, Filters } from "@/types";
+import type { DetailViewOptions, Filters, SettingsView } from "@/types";
 import DetailView from "./DetailView";
 import {
   Sheet,
@@ -11,6 +11,7 @@ import {
   SheetTitle,
 } from "./ui/sheet";
 import { Sun, Moon } from "lucide-react";
+import SettingsList from "./settings/SettingsList";
 
 export default function Dashboard() {
   const [filters, setFilters] = useState<Filters>({
@@ -35,7 +36,8 @@ export default function Dashboard() {
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [displayTheme, setDisplayTheme] = useState<"light" | "dark">("dark");
-  const [activeView, setActiveView] = useState<DetailViewOptions>(null);
+  const [activeView, setActiveView] = useState<DetailViewOptions>("job");
+  const [selectedSettings, setSelectedSettings] = useState<SettingsView>(null);
 
   function handleDataUpdate() {
     setRefreshCounter((prev) => prev + 1);
@@ -58,7 +60,11 @@ export default function Dashboard() {
             <SheetHeader>
               <SheetTitle className={"sr-only"}>Job Filters</SheetTitle>
             </SheetHeader>
-            <Navigation filters={filters} onChange={setFilters} />
+            <Navigation
+              filters={filters}
+              onChange={setFilters}
+              onSelectSettings={(view) => setActiveView(view)}
+            />
           </SheetContent>
         </Sheet>
         <div className="flex gap-3 ml-auto">
@@ -79,20 +85,33 @@ export default function Dashboard() {
       </div>
       <div className="flex min-h-0">
         <div className="bg-card border-2 border-border rounded-xl hidden md:block flex-1 max-w-64">
-          <Navigation filters={filters} onChange={setFilters} />
+          <Navigation
+            filters={filters}
+            onChange={setFilters}
+            onSelectSettings={(view) => setActiveView(view)}
+          />
         </div>
         <div
-          className={`bg-background border-2 border-border ${selectedJobId === null ? "block" : "hidden"} sm:block h-full min-h-0 flex-2`}
+          className={`bg-background border-2 border-border ${activeView === "job" && selectedJobId !== null ? "hidden sm:block" : "block"} sm:block h-full min-h-0 flex-2`}
         >
-          <JobList
-            filters={filters}
-            onSelectJob={(id) => {
-              setSelectedJobId(id);
-              setActiveView("job");
-            }}
-            selectedJobId={selectedJobId}
-            refreshCounter={refreshCounter}
-          />
+          {activeView === "job" ? (
+            <JobList
+              filters={filters}
+              onSelectJob={(id) => {
+                setSelectedJobId(id);
+                setActiveView("job");
+              }}
+              selectedJobId={selectedJobId}
+              refreshCounter={refreshCounter}
+            />
+          ) : (
+            <SettingsList
+              onSelectSettings={(setting) => {
+                setSelectedSettings(setting);
+              }}
+              selectedSettings={selectedSettings}
+            />
+          )}
         </div>
         <div
           className={`${selectedJobId === null ? "hidden" : "block"} sm:block bg-background rounded-xl shadow-sm h-full min-h-0 flex-3`}

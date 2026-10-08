@@ -78,9 +78,21 @@ export type Filters = {
   applicationFilters: ApplicationFilters;
 };
 
-export type NavigationProps = {
-  filters: Filters;
-  onChange: (filters: Filters) => void;
+export type DetailViewOptions = "job" | "settings" | null;
+
+export type ApiSearchParams = {
+  source: "himalayas" | "jobicy" | "query";
+  param_name: string;
+  param_value: string[] | null;
+  accepted_values: string[] | null;
 };
 
-export type DetailViewOptions = "job" | "settings" | null;
+export type SettingsView =
+  | "general"
+  | "jobApi"
+  | "himalayas"
+  | "jobicy"
+  | "scorer"
+  | "profile"
+  | "prompt"
+  | null;

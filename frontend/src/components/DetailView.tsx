@@ -1,6 +1,6 @@
 import type { DetailViewOptions } from "@/types";
 import JobDetails from "./JobDetails";
-import Settings from "./Settings";
+import Settings from "./settings/SettingsList";
 
 export default function DetailView({
   activeView,
@@ -27,7 +27,7 @@ export default function DetailView({
         <JobDetails selectedJobId={selectedJobId} onDataUpdate={onDataUpdate} />
       )}
 
-      {activeView === "settings" && <Settings />}
+      {activeView === "settings"}
     </div>
   );
 }

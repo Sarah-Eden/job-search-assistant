@@ -4,6 +4,7 @@ import type {
   JobFilters,
   JobHeader,
   ReviewStatus,
+  ApiSearchParams,
 } from "@/types";
 import { buildJobQueryString } from "./utils";
 
@@ -58,6 +59,14 @@ export async function updateApplication(
 export async function getJobs(jobFilters: JobFilters): Promise<JobHeader[]> {
   const query = buildJobQueryString(jobFilters);
   const response = await fetch(`${API_URL}/jobs?${query}`);
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function getApiSearchParams(): Promise<ApiSearchParams[]> {
+  const response = await fetch(`${API_URL}/settings/search_params`);
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`);
   }

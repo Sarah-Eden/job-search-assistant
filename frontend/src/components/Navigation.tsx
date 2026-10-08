@@ -1,14 +1,22 @@
 import React from "react";
 import type {
-  NavigationProps,
   Filters,
   JobFilters,
   ApplicationFilters,
+  DetailViewOptions,
 } from "@/types";
 import { useForm } from "react-hook-form";
 import InputWrapper, { inputStyle } from "./InputWrapper";
 
-export default function Navigation({ filters, onChange }: NavigationProps) {
+export default function Navigation({
+  filters,
+  onChange,
+  onSelectSettings,
+}: {
+  filters: Filters;
+  onChange: (filters: Filters) => void;
+  onSelectSettings: (view: DetailViewOptions) => void;
+}) {
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const updated = { ...filters, view: event.target.value as Filters["view"] };
     onChange(updated);
@@ -180,7 +188,10 @@ export default function Navigation({ filters, onChange }: NavigationProps) {
           </button>
         </form>
       )}
-      <button className="bg-card hover:bg-background-secondary rounded-md px-3 py-2 text-foreground border border-border mt-auto">
+      <button
+        onClick={() => onSelectSettings("settings")}
+        className="bg-card hover:bg-background-secondary rounded-md px-3 py-2 text-foreground border border-border mt-auto"
+      >
         Settings
       </button>
     </div>
