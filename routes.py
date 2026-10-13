@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
@@ -11,6 +11,7 @@ from job_agent.models import (
     JobRecord,
     JobDetailView,
     JobSearchParams,
+    JobSearchParamsUpdate,
 )
 from datetime import date
 from typing import Optional, Literal
@@ -112,3 +113,15 @@ def get_job_search_params(
     repo: SettingsRepository = Depends(get_settings_repository),
 ) -> list[JobSearchParams]:
     return repo.get_all_search_params()
+
+
+@app.patch("/settings/search_params/{source}")
+def update_search_params(
+    source: str,
+    params_update: JobSearchParamsUpdate,
+    repo: SettingsRepository = Depends(get_settings_repository),
+):
+    try:
+        repo.update_search_params(source=source, params_update=params_update)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e

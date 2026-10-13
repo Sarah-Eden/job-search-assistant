@@ -1,8 +1,9 @@
-from sqlalchemy import or_, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from db.schema import JobApiParams
-from typing import Optional
 import logging
+
+from job_agent.models import JobSearchParamsUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,17 @@ class SettingsRepository:
             )
             return list(session.scalars(stmt))
 
-    def get_search_keywords(self):
+    def update_search_params(self, source, params_update: JobSearchParamsUpdate):
         with Session(self.engine) as session:
-            stmt = select(JobApiParams).where(JobApiParams.source == "query")
+            stmt = select(JobApiParams).where(JobApiParams.source == source)
+            app = list(session.scalars(stmt))
+            records = {record.param_name: record for record in app}
+
+            for field in params_update.model_dump():
+                if field not in records:
+                    raise ValueError(f"Row not found for {source}, {field}")
+
+            for field, value in params_update.model_dump().items():
+                records[field].param_value = value
+
+            session.commit()

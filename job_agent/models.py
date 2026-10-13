@@ -1,5 +1,12 @@
 from enum import Enum
-from pydantic import BaseModel, Field, AliasChoices, ConfigDict, field_validator
+from pydantic import (
+    BaseModel,
+    Field,
+    AliasChoices,
+    ConfigDict,
+    field_validator,
+    RootModel,
+)
 from datetime import date, datetime
 from bs4 import BeautifulSoup
 from typing import Literal, NamedTuple
@@ -152,3 +159,7 @@ class JobSearchParams(BaseModel):
     param_value: list | None = None
     accepted_values: list | None = None
     model_config = ConfigDict(validate_by_name=True, from_attributes=True)
+
+
+class JobSearchParamsUpdate(RootModel[dict[str, list[str] | None]]):
+    pass
