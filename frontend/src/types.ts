@@ -90,6 +90,7 @@ export type ApiSearchParams = {
 export type SettingsView =
   | "general"
   | "jobApi"
+  | "searchTerms"
   | "himalayas"
   | "jobicy"
   | "scorer"

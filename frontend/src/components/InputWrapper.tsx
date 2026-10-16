@@ -5,14 +5,18 @@ export const inputStyle =
 
 export default function InputWrapper({
   label,
+  htmlFor,
   children,
 }: {
   label: string;
+  htmlFor?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm text-foreground">{label}</label>
+      <label className="text-sm text-foreground" htmlFor={htmlFor}>
+        {label}
+      </label>
       {children}
     </div>
   );

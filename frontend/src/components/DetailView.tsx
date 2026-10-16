@@ -1,17 +1,19 @@
-import type { DetailViewOptions } from "@/types";
+import type { DetailViewOptions, SettingsView } from "@/types";
 import JobDetails from "./JobDetails";
-import Settings from "./settings/SettingsList";
+import SettingsDetails from "./settings/SettingsDetails";
 
 export default function DetailView({
   activeView,
   selectedJobId,
   onJobClose,
   onDataUpdate,
+  selectedSettings,
 }: {
   activeView: DetailViewOptions;
   selectedJobId: number | null;
   onJobClose: () => void;
   onDataUpdate: () => void;
+  selectedSettings: SettingsView;
 }) {
   return (
     <div className="flex flex-col gap-4 h-full px-10 pt-4">
@@ -27,7 +29,9 @@ export default function DetailView({
         <JobDetails selectedJobId={selectedJobId} onDataUpdate={onDataUpdate} />
       )}
 
-      {activeView === "settings"}
+      {activeView === "settings" && (
+        <SettingsDetails selectedSettings={selectedSettings} />
+      )}
     </div>
   );
 }

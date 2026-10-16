@@ -33,6 +33,12 @@ export default function SettingsList({
           Job API
         </button>
         <button
+          className={`${childButtonStyle} ${selectedSettings === "searchTerms" ? "bg-background-muted/50" : ""}`}
+          onClick={() => onSelectSettings("searchTerms")}
+        >
+          Search Terms
+        </button>
+        <button
           className={`${childButtonStyle} ${selectedSettings === "himalayas" ? "bg-background-muted/50" : ""}`}
           onClick={() => onSelectSettings("himalayas")}
         >

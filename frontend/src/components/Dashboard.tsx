@@ -121,6 +121,7 @@ export default function Dashboard() {
             selectedJobId={selectedJobId}
             onDataUpdate={handleDataUpdate}
             onJobClose={handleJobClose}
+            selectedSettings={selectedSettings}
           />
         </div>
       </div>

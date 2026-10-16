@@ -72,3 +72,17 @@ export async function getApiSearchParams(): Promise<ApiSearchParams[]> {
   }
   return response.json();
 }
+
+export async function updateApiSearchParams(
+  source: string,
+  params: Record<string, string[] | null>,
+): Promise<void> {
+  const response = await fetch(`${API_URL}/settings/search_params/${source}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+}
