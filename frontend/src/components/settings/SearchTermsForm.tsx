@@ -12,8 +12,10 @@ type SearchTermValues = { searchTerms: string[] | null };
 
 export default function SearchTermsForm({
   settings,
+  onSettingsUpdate,
 }: {
   settings: ApiSearchParams;
+  onSettingsUpdate: () => Promise<void>;
 }) {
   const { control, handleSubmit } = useForm<SearchTermValues>({
     defaultValues: { searchTerms: settings.param_value },
@@ -25,6 +27,7 @@ export default function SearchTermsForm({
       setStatus(null);
       await updateApiSearchParams("query", { search_terms: data.searchTerms });
       setStatus("success");
+      await onSettingsUpdate();
     } catch (error) {
       console.error(error);
       setStatus("error");

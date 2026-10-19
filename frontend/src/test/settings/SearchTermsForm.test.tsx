@@ -24,13 +24,23 @@ vi.mock("@/api", () => ({
 }));
 
 test("displays saved search terms", () => {
-  render(<SearchTermsForm settings={sampleParams} />);
+  render(
+    <SearchTermsForm
+      settings={sampleParams}
+      onSettingsUpdate={vi.fn().mockResolvedValue(undefined)}
+    />,
+  );
   expect(screen.getByText("software developer")).toBeInTheDocument();
   expect(screen.getByText("Python Developer")).toBeInTheDocument();
 });
 
 test("adding new search terms to the display", async () => {
-  render(<SearchTermsForm settings={sampleNullParams} />);
+  render(
+    <SearchTermsForm
+      settings={sampleNullParams}
+      onSettingsUpdate={vi.fn().mockResolvedValue(undefined)}
+    />,
+  );
   const user = userEvent.setup();
   const input = screen.getByRole("combobox", { name: "Search Terms" });
   await user.click(input);
@@ -45,7 +55,12 @@ test("adding new search terms to the display", async () => {
 });
 
 test("submit new search terms", async () => {
-  render(<SearchTermsForm settings={sampleNullParams} />);
+  render(
+    <SearchTermsForm
+      settings={sampleNullParams}
+      onSettingsUpdate={vi.fn().mockResolvedValue(undefined)}
+    />,
+  );
   const user = userEvent.setup();
   const input = screen.getByRole("combobox", { name: "Search Terms" });
   await user.click(input);
@@ -70,7 +85,12 @@ test("Failed save message appears", async () => {
   vi.mocked(updateApiSearchParams).mockRejectedValueOnce(
     new Error("Request failed"),
   );
-  render(<SearchTermsForm settings={sampleNullParams} />);
+  render(
+    <SearchTermsForm
+      settings={sampleNullParams}
+      onSettingsUpdate={vi.fn().mockResolvedValue(undefined)}
+    />,
+  );
   const user = userEvent.setup();
   const input = screen.getByRole("combobox", { name: "Search Terms" });
   await user.click(input);

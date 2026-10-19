@@ -2,7 +2,7 @@ import type { ApiSearchParams, SettingsView } from "@/types";
 import { Fragment } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
 import { getApiSearchParams } from "@/api";
-import SearchSettingsForm from "./SearchSettingsForm";
+import HimalayasForm from "./HimalayasForm";
 import SearchTermsForm from "./SearchTermsForm";
 
 export default function SettingsDetails({
@@ -73,17 +73,21 @@ export default function SettingsDetails({
           (selectedSettings === "jobApi" ||
             selectedSettings === "searchTerms") && (
             <div className="flex flex-col p-8 border border-border rounded-2xl bg-card text-card-foreground">
-              <SearchTermsForm settings={searchTermsSetting} />
+              <SearchTermsForm
+                settings={searchTermsSetting}
+                onSettingsUpdate={getSettings}
+              />
             </div>
           )}
         {apiSettings !== null &&
           (selectedSettings === "jobApi" ||
             selectedSettings === "himalayas") && (
             <div className="flex flex-col p-8 border border-border rounded-2xl bg-card text-card-foreground">
-              <SearchSettingsForm
+              <HimalayasForm
                 settings={apiSettings.filter(
                   (settings) => settings.source === "himalayas",
                 )}
+                onSettingsUpdate={getSettings}
               />
             </div>
           )}
