@@ -6,6 +6,7 @@ import { updateApiSearchParams } from "@/api";
 import { Button } from "@base-ui/react";
 import { useState } from "react";
 import { Check, X } from "lucide-react";
+import { reactSelectInputStyle } from "./SharedStyles";
 
 type SearchTermValues = { searchTerms: string[] | null };
 
@@ -41,23 +42,7 @@ export default function SearchTermsForm({
               isMulti
               inputId="searchTerms"
               unstyled
-              classNames={{
-                control: ({ isFocused }) =>
-                  `border-2 border-border bg-card rounded-md px-3 py-2 text-foreground-secondary ${isFocused ? "ring-2 ring-ring" : ""}`,
-                menu: () =>
-                  "mt-1 rounded-md border border-border bg-card shadow-md z-10",
-                option: ({ isFocused }) =>
-                  `px-3 py-2 text-foreground cursor-pointer ${
-                    isFocused ? "bg-muted" : ""
-                  }`,
-                multiValue: () =>
-                  "flex items-center gap-1 rounded-md bg-muted mr-1 px-2 py-1",
-
-                multiValueLabel: () => "text-sm text-foreground",
-
-                multiValueRemove: () =>
-                  "cursor-pointer rounded-sm hover:bg-border",
-              }}
+              classNames={reactSelectInputStyle}
               value={(field.value ?? []).map((value) => ({
                 label: value,
                 value: value,
