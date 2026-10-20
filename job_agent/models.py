@@ -157,7 +157,7 @@ class JobSearchParams(BaseModel):
     source: str
     param_name: str
     param_value: list | None = None
-    accepted_values: list | None = None
+    accepted_values: dict[str, str] | None = None
     model_config = ConfigDict(validate_by_name=True, from_attributes=True)
 
 

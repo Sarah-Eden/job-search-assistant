@@ -99,10 +99,9 @@ export default function HimalayasForm({
               inputId="seniority"
               unstyled
               classNames={reactSelectInputStyle}
-              options={settingsDict.seniority.accepted_values?.map((item) => ({
-                label: item,
-                value: item,
-              }))}
+              options={Object.entries(
+                settingsDict.seniority.accepted_values ?? {},
+              ).map(([label, value]) => ({ label: label, value: value }))}
 
               value={(field.value ?? []).map((value) => ({
                 label: value,
@@ -130,12 +129,9 @@ export default function HimalayasForm({
               inputId="employmentType"
               unstyled
               classNames={reactSelectInputStyle}
-              options={settingsDict.employment_type.accepted_values?.map(
-                (item) => ({
-                  label: item,
-                  value: item,
-                }),
-              )}
+              options={Object.entries(
+                settingsDict.employment_type.accepted_values ?? {},
+              ).map(([label, value]) => ({ label: label, value: value }))}
               value={(field.value ?? []).map((value) => ({
                 label: value,
                 value: value,
@@ -185,10 +181,9 @@ export default function HimalayasForm({
               inputId="sort"
               unstyled
               classNames={reactSelectInputStyle}
-              options={settingsDict.sort.accepted_values?.map((value) => ({
-                label: value,
-                value: value,
-              }))}
+              options={Object.entries(
+                settingsDict.sort.accepted_values ?? {},
+              ).map(([label, value]) => ({ label: label, value: value }))}
               value={
                 field.value?.[0]
                   ? { label: field.value[0], value: field.value[0] }

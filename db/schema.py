@@ -120,4 +120,4 @@ class JobApiParams(Base):
     source: Mapped[str] = mapped_column(String(255), primary_key=True)
     param_name: Mapped[str] = mapped_column(String(255), primary_key=True)
     param_value: Mapped[Optional[list]] = mapped_column(JSON)
-    accepted_values: Mapped[Optional[list]] = mapped_column(JSON)
+    accepted_values: Mapped[Optional[dict]] = mapped_column(JSON)
