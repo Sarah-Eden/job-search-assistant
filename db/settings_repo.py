@@ -38,3 +38,12 @@ class SettingsRepository:
                 records[field].param_value = value
 
             session.commit()
+
+    def update_accepted_values(self, source, param_name, accepted_values):
+        with Session(self.engine) as session:
+            stmt = select(JobApiParams).where(
+                JobApiParams.source == source, JobApiParams.param_name == param_name
+            )
+            app = session.scalars(stmt).one()
+            app.accepted_values = accepted_values
+            session.commit()
