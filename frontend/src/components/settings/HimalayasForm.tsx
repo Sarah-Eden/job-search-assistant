@@ -34,6 +34,9 @@ export default function HimalayasForm({
   const settingsDict = Object.fromEntries(
     settings.map((setting) => [setting.param_name, setting]),
   );
+  const sortOptions = Object.entries(
+    settingsDict.sort.accepted_values ?? {},
+  ).map(([label, value]) => ({ label, value }));
   const { control, handleSubmit } = useForm<HimalayasValues>({
     defaultValues: {
       country: settingsDict["country"].param_value,
@@ -61,116 +64,118 @@ export default function HimalayasForm({
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
       <p className="text-center">Himalayas API Settings</p>
-      <InputWrapper label="Country" htmlFor="country">
-        <Controller
-          name="country"
-          control={control}
-          render={({ field }) => (
-            <Select
-              options={countries}
-              getOptionLabel={(countries) => countries.name}
-              getOptionValue={(countries) => countries.code}
-              isMulti
-              isClearable
-              inputId="country"
-              unstyled
-              classNames={reactSelectInputStyle}
-              value={countries.filter((country) =>
-                field.value?.includes(country.code),
-              )}
-              onChange={(selected) => {
-                setStatus(null);
-                const codes = selected.map((country) => country.code);
-                field.onChange(codes.length > 0 ? codes : null);
-              }}
-            />
-          )}
-        />
-      </InputWrapper>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <InputWrapper label="Country" htmlFor="country">
+          <Controller
+            name="country"
+            control={control}
+            render={({ field }) => (
+              <Select
+                options={countries}
+                getOptionLabel={(countries) => countries.name}
+                getOptionValue={(countries) => countries.code}
+                isMulti
+                isClearable
+                inputId="country"
+                unstyled
+                classNames={reactSelectInputStyle}
+                value={countries.filter((country) =>
+                  field.value?.includes(country.code),
+                )}
+                onChange={(selected) => {
+                  setStatus(null);
+                  const codes = selected.map((country) => country.code);
+                  field.onChange(codes.length > 0 ? codes : null);
+                }}
+              />
+            )}
+          />
+        </InputWrapper>
 
-      <InputWrapper label="Seniority" htmlFor="seniority">
-        <Controller
-          name="seniority"
-          control={control}
-          render={({ field }) => (
-            <Select
-              isMulti
-              isClearable
-              inputId="seniority"
-              unstyled
-              classNames={reactSelectInputStyle}
-              options={Object.entries(
-                settingsDict.seniority.accepted_values ?? {},
-              ).map(([label, value]) => ({ label: label, value: value }))}
+        <InputWrapper label="Seniority" htmlFor="seniority">
+          <Controller
+            name="seniority"
+            control={control}
+            render={({ field }) => (
+              <Select
+                isMulti
+                isClearable
+                inputId="seniority"
+                unstyled
+                classNames={reactSelectInputStyle}
+                options={Object.entries(
+                  settingsDict.seniority.accepted_values ?? {},
+                ).map(([label, value]) => ({ label: label, value: value }))}
 
-              value={(field.value ?? []).map((value) => ({
-                label: value,
-                value: value,
-              }))}
+                value={(field.value ?? []).map((value) => ({
+                  label: value,
+                  value: value,
+                }))}
 
-              onChange={(selected) => {
-                setStatus(null);
-                const options = selected.map((select) => select.value);
-                field.onChange(options.length > 0 ? options : null);
-              }}
-            />
-          )}
-        />
-      </InputWrapper>
+                onChange={(selected) => {
+                  setStatus(null);
+                  const options = selected.map((select) => select.value);
+                  field.onChange(options.length > 0 ? options : null);
+                }}
+              />
+            )}
+          />
+        </InputWrapper>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <InputWrapper label="Employment Type" htmlFor="employmentType">
+          <Controller
+            name="employment_type"
+            control={control}
+            render={({ field }) => (
+              <Select
+                isMulti
+                isClearable
+                inputId="employmentType"
+                unstyled
+                classNames={reactSelectInputStyle}
+                options={Object.entries(
+                  settingsDict.employment_type.accepted_values ?? {},
+                ).map(([label, value]) => ({ label: label, value: value }))}
+                value={(field.value ?? []).map((value) => ({
+                  label: value,
+                  value: value,
+                }))}
+                onChange={(selected) => {
+                  setStatus(null);
+                  const options = selected.map((select) => select.value);
+                  field.onChange(options.length > 0 ? options : null);
+                }}
+              />
+            )}
+          />
+        </InputWrapper>
 
-      <InputWrapper label="Employment Type" htmlFor="employmentType">
-        <Controller
-          name="employment_type"
-          control={control}
-          render={({ field }) => (
-            <Select
-              isMulti
-              isClearable
-              inputId="employmentType"
-              unstyled
-              classNames={reactSelectInputStyle}
-              options={Object.entries(
-                settingsDict.employment_type.accepted_values ?? {},
-              ).map(([label, value]) => ({ label: label, value: value }))}
-              value={(field.value ?? []).map((value) => ({
-                label: value,
-                value: value,
-              }))}
-              onChange={(selected) => {
-                setStatus(null);
-                const options = selected.map((select) => select.value);
-                field.onChange(options.length > 0 ? options : null);
-              }}
-            />
-          )}
-        />
-      </InputWrapper>
-
-      <InputWrapper label="Timezone" htmlFor="timezone">
-        <Controller
-          name="timezone"
-          control={control}
-          render={({ field }) => (
-            <Select
-              isClearable
-              inputId="timezone"
-              unstyled
-              classNames={reactSelectInputStyle}
-              options={timezoneOptions}
-              value={
-                timezoneOptions.find(
-                  (option) => option.value === field.value?.[0],
-                ) ?? null
-              }
-              onChange={(selected) => {
-                setStatus(null);
-                field.onChange(selected ? [selected.value] : null);
-              }}
-            />
-          )}
-        />
-      </InputWrapper>
-
+        <InputWrapper label="Timezone" htmlFor="timezone">
+          <Controller
+            name="timezone"
+            control={control}
+            render={({ field }) => (
+              <Select
+                isClearable
+                inputId="timezone"
+                unstyled
+                classNames={reactSelectInputStyle}
+                options={timezoneOptions}
+                value={
+                  timezoneOptions.find(
+                    (option) => option.value === field.value?.[0],
+                  ) ?? null
+                }
+                onChange={(selected) => {
+                  setStatus(null);
+                  field.onChange(selected ? [selected.value] : null);
+                }}
+              />
+            )}
+          />
+        </InputWrapper>
+      </div>
       <InputWrapper label="Sort Direction" htmlFor="sort">
         <Controller
           name="sort"
@@ -181,14 +186,10 @@ export default function HimalayasForm({
               inputId="sort"
               unstyled
               classNames={reactSelectInputStyle}
-              options={Object.entries(
-                settingsDict.sort.accepted_values ?? {},
-              ).map(([label, value]) => ({ label: label, value: value }))}
-              value={
-                field.value?.[0]
-                  ? { label: field.value[0], value: field.value[0] }
-                  : null
-              }
+              options={sortOptions}
+              value={sortOptions.filter((option) =>
+                (field.value ?? []).includes(option.value),
+              )}
               onChange={(selected) => {
                 setStatus(null);
                 field.onChange(selected ? [selected.value] : null);

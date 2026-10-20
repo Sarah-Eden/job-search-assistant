@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getApiSearchParams } from "@/api";
 import HimalayasForm from "./HimalayasForm";
 import SearchTermsForm from "./SearchTermsForm";
+import JobicyForm from "./JobicyForm";
 
 export default function SettingsDetails({
   selectedSettings,
@@ -45,7 +46,7 @@ export default function SettingsDetails({
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 px-10 pt-4 h-full">
+    <div className="flex flex-col gap-4 pt-1 px-4 h-full">
       <div>
         <span
           className={
@@ -92,11 +93,19 @@ export default function SettingsDetails({
             </div>
           )}
 
-        {(selectedSettings === "jobApi" || selectedSettings === "jobicy") && (
-          <div className="flex flex-col p-8 border border-border rounded-2xl bg-card text-card-foreground">
-            <span className="text-foreground font-light">Jobicy</span>
-          </div>
-        )}
+        {apiSettings !== null &&
+          (selectedSettings === "jobApi" || selectedSettings === "jobicy") && (
+            <div className="flex flex-col p-8 border border-border rounded-2xl bg-card text-card-foreground">
+              <span className="text-foreground font-light">
+                <JobicyForm
+                  settings={apiSettings.filter(
+                    (settings) => settings.source === "jobicy",
+                  )}
+                  onSettingsUpdate={getSettings}
+                />
+              </span>
+            </div>
+          )}
 
         {(selectedSettings === "scorer" || selectedSettings === "prompt") && (
           <div className="flex flex-col p-8 border border-border rounded-2xl bg-card text-card-foreground">
