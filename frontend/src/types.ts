@@ -84,7 +84,7 @@ export type ApiSearchParams = {
   source: "himalayas" | "jobicy" | "query";
   param_name: string;
   param_value: string[] | null;
-  accepted_values: string[] | null;
+  accepted_values: Record<string, string> | null;
 };
 
 export type SettingsView =
