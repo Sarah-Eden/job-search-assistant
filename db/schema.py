@@ -23,7 +23,10 @@ class Base(DeclarativeBase):
 
 class Job(Base):
     __tablename__ = "job_postings"
+    __table_args__ = (UniqueConstraint("source", "source_job_id"),)
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
+    source: Mapped[str] = mapped_column(String(255))
+    source_job_id: Mapped[str] = mapped_column(String(255))
     title: Mapped[Optional[str]] = mapped_column(String(255))
     company_name: Mapped[Optional[str]] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
@@ -33,7 +36,7 @@ class Job(Base):
     categories: Mapped[Optional[list]] = mapped_column(JSON)
     pub_date: Mapped[Optional[date]] = mapped_column(Date)
     expiry_date: Mapped[Optional[date]] = mapped_column(Date)
-    application_url: Mapped[str] = mapped_column(Text, unique=True)
+    application_url: Mapped[str] = mapped_column(Text)
     is_relevant: Mapped[Optional[bool]] = mapped_column(Boolean)
     review_status: Mapped[str] = mapped_column(
         Enum("new", "accepted", "declined", name="review_status"), server_default="new"
@@ -97,21 +100,11 @@ class SearchQuery(Base):
     source: Mapped[str] = mapped_column(String(255))
     parameters: Mapped[dict] = mapped_column(JSON)
     status: Mapped[str] = mapped_column(
-        Enum("success", "error", "no_results", name="search_query_status")
+        Enum("success", "error", "partial", name="search_query_status")
     )
-    jobs_found: Mapped[int] = mapped_column(Integer)
-    num_relevant: Mapped[Optional[int]] = mapped_column(Integer)
-    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-
-
-class JobSearchQuery(Base):
-    __tablename__ = "job_search_queries"
-    __table_args__ = (UniqueConstraint("job_id", "search_query_id"),)
-    id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
-    job_id: Mapped[int] = mapped_column(ForeignKey("job_postings.id"), index=True)
-    search_query_id: Mapped[int] = mapped_column(
-        ForeignKey("search_queries.id"), index=True
-    )
+    retrieved_count: Mapped[int] = mapped_column(Integer)
+    provider_total_matches: Mapped[Optional[int]] = mapped_column(Integer)
+    new_jobs: Mapped[int] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
 
